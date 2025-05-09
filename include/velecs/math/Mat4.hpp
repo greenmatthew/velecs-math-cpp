@@ -10,15 +10,20 @@
 
 #pragma once
 
+#include <iostream>
+#include <iomanip>
+
 #include <glm/mat4x4.hpp>
 
 namespace velecs::math {
 
-/// @class Mat4
-/// @brief Brief description.
+/// @struct Mat4
+/// @brief A wrapper struct for glm::mat4 to provide consistent interfaces with other math classes.
 ///
-/// Rest of description.
-class Mat4 {
+/// This class wraps the glm::mat4 type to provide a consistent interface with other
+/// classes in the velecs math library, while still allowing easy access to the
+/// underlying glm functionality.
+struct Mat4 {
 public:
     // Enums
 
@@ -44,6 +49,22 @@ public:
     ~Mat4() = default;
 
     // Public Methods
+
+    /// @brief Outputs a Mat4 object to an output stream in a formatted manner.
+    /// @param[in] os The output stream to write to.
+    /// @param[in] mat The Mat4 object to output.
+    /// @return The same output stream, for chaining.
+    friend std::ostream& operator<<(std::ostream& os, const Mat4& mat)
+    {
+        for (int row = 0; row < 4; ++row) {
+            os << "| ";
+            for (int col = 0; col < 4; ++col) {
+                os << std::setw(10) << std::setprecision(4) << mat.internal_mat[col][row] << " ";
+            }
+            os << "|" << std::endl;
+        }
+        return os;
+    }
 
 protected:
     // Protected Fields
