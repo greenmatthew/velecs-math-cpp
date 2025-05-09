@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
 project(velecs-math VERSION 0.1.0)
 
+# Set C++ standard to C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Option to control whether to build the test executable
@@ -8,8 +13,9 @@ option(VELECS_MATH_BUILD_TESTS "Build test executable for velecs-math" OFF)
 
 # Source files for the library
 set(LIB_SOURCES
-    src/vec2.cpp
-    src/vec3.cpp
+    src/Vec2.cpp
+    src/Vec3.cpp
+    src/GLMUtility.cpp
 )
 
 # Always build the library
