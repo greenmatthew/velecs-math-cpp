@@ -20,9 +20,29 @@ target_include_directories(velecs-math
         $<INSTALL_INTERFACE:include>
 )
 
-# # Link dependencies
-# find_package(glm REQUIRED)
-# target_link_libraries(velecs-math PUBLIC glm::glm)
+# Link dependencies
+# Find GLM or create an interface target for it
+if(NOT TARGET glm::glm)
+    find_package(glm QUIET)
+    
+    if(NOT glm_FOUND)
+        # Create interface library if find_package fails
+        add_library(glm INTERFACE)
+        
+        # Check if VULKAN_SDK environment variable is set
+        if(DEFINED ENV{VULKAN_SDK})
+            # Specify the include directory for GLM using Vulkan SDK path
+            target_include_directories(glm INTERFACE "$ENV{VULKAN_SDK}/Include")
+            target_compile_definitions(glm INTERFACE GLM_FORCE_DEPTH_ZERO_TO_ONE)
+            add_library(glm::glm ALIAS glm)
+        else()
+            message(WARNING "VULKAN_SDK environment variable not set. GLM might not be found.")
+        endif()
+    endif()
+endif()
+
+# Link against GLM
+target_link_libraries(velecs-math PUBLIC glm::glm)
 
 # Installation rules for the library
 install(TARGETS velecs-math
