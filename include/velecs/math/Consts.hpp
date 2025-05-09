@@ -4,7 +4,7 @@
 /// 
 /// @section LICENSE
 /// 
-/// Copyright (c) 2023 Matthew Green - All rights reserved
+/// Copyright (c) 2025 Matthew Green - All rights reserved
 /// Unauthorized copying of this file, via any medium is strictly prohibited
 /// Proprietary and confidential
 
@@ -22,4 +22,4 @@ namespace velecs::math {
     constexpr float FLOAT_MAX_VALUE = std::numeric_limits<float>::max();
     constexpr float FLOAT_MIN_VALUE = std::numeric_limits<float>::min();
 
-} // namespace velecs
+} // namespace velecs::math

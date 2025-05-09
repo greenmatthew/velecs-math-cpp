@@ -4,7 +4,7 @@
 /// 
 /// @section LICENSE
 /// 
-/// Copyright (c) 2023 Matthew Green - All rights reserved
+/// Copyright (c) 2025 Matthew Green - All rights reserved
 /// Unauthorized copying of this file, via any medium is strictly prohibited
 /// Proprietary and confidential
 
@@ -262,4 +262,4 @@ inline Vec2 operator*(const float lhs, const Vec2 rhs)
     return rhs * lhs;
 }
 
-} // namespace velecs
+} // namespace velecs::math

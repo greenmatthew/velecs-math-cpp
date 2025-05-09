@@ -4,7 +4,7 @@
 /// 
 /// @section LICENSE
 /// 
-/// Copyright (c) 2023 Matthew Green - All rights reserved
+/// Copyright (c) 2025 Matthew Green - All rights reserved
 /// Unauthorized copying of this file, via any medium is strictly prohibited
 /// Proprietary and confidential
 
@@ -51,4 +51,4 @@ private:
     // Private Methods
 };
 
-} // namespace velecs
+} // namespace velecs::math
