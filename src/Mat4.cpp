@@ -29,6 +29,21 @@ Mat4::Mat4(float diagonal)
 
 // Public Methods
 
+Mat4 Mat4::Translated(const Vec3& translation) const
+{
+    return glm::translate(internal_mat, static_cast<glm::vec3>(translation));
+}
+
+Mat4 Mat4::Scaled(const Vec3& scale) const
+{
+    return glm::scale(internal_mat, static_cast<glm::vec3>(scale));
+}
+
+Mat4 Mat4::Rotated(const float rad, const Vec3& axis) const
+{
+    return glm::rotate(internal_mat, rad, static_cast<glm::vec3>(axis));
+}
+
 Vec4 Mat4::XBasis() const
 {
     auto column = internal_mat[0];

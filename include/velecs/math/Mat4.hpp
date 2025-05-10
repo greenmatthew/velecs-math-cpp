@@ -55,6 +55,22 @@ public:
 
     // Public Methods
 
+    /// @brief Returns a new matrix with translation applied to this matrix.
+    /// @param translation The translation vector to apply.
+    /// @return A new matrix representing this matrix with the translation applied.
+    Mat4 Translated(const Vec3& translation) const;
+
+    /// @brief Returns a new matrix with scaling applied to this matrix.
+    /// @param scale The scale factors for x, y, and z axes.
+    /// @return A new matrix representing this matrix with the scaling applied.
+    Mat4 Scaled(const Vec3& scale) const;
+
+    /// @brief Returns a new matrix with rotation applied to this matrix.
+    /// @param rad The rotation angle in radians.
+    /// @param axis The axis to rotate around (should be normalized).
+    /// @return A new matrix representing this matrix with the rotation applied.
+    Mat4 Rotated(const float rad, const Vec3& axis) const;
+
     /// @brief Gets the X basis vector (first column) of the matrix.
     /// @details Returns the x-axis basis vector which represents the 
     ///          right direction in the matrix's transformation.
@@ -85,10 +101,27 @@ public:
 
     /// @brief Creates a translation matrix from a Vec3.
     /// @param translation The translation vector to use.
-    /// @return A new transformation matrix containing the specified translation.
-    static inline Mat4 Translate(const Vec3& translation)
+    /// @return A new transformation matrix with the specified translation applied to an identity matrix.
+    static inline Mat4 CreateTranslation(const Vec3& translation)
     {
         return glm::translate(glm::mat4(1.0f), static_cast<glm::vec3>(translation));
+    }
+
+    /// @brief Creates a scaling matrix from a Vec3.
+    /// @param scale The scale factors for x, y, and z axes.
+    /// @return A new transformation matrix with the specified scaling applied to an identity matrix.
+    static inline Mat4 CreateScale(const Vec3& scale)
+    {
+        return glm::scale(glm::mat4(1.0f), static_cast<glm::vec3>(scale));
+    }
+
+    /// @brief Creates a rotation matrix around an arbitrary axis.
+    /// @param rad The rotation angle in radians.
+    /// @param axis The axis to rotate around (should be normalized).
+    /// @return A new transformation matrix with the specified rotation applied to an identity matrix.
+    static inline Mat4 CreateRotation(const float rad, const Vec3& axis)
+    {
+        return glm::rotate(glm::mat4(1.0f), rad, static_cast<glm::vec3>(axis));
     }
 
     /// @brief Outputs a Mat4 object to an output stream in a formatted manner.
