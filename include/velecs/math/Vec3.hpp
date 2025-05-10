@@ -87,6 +87,22 @@ public:
     /// @returns A glm::vec3 with the same components as this Vec3.
     operator glm::vec3() const;
 
+    /// @brief Converts this Vec3 to a homogeneous point (w=1).
+    /// @details Creates a Vec4 with the components of this Vec3 and sets w=1.
+    /// @returns A Vec4 representing a point in homogeneous coordinates.
+    inline Vec4 ToHomogeneousPoint() const
+    {
+        return Vec4(x, y, z, 1.0f);
+    }
+
+    /// @brief Converts this Vec3 to a homogeneous vector/direction (w=0).
+    /// @details Creates a Vec4 with the components of this Vec3 and sets w=0.
+    /// @returns A Vec4 representing a vector/direction in homogeneous coordinates.
+    inline Vec4 ToHomogeneousVector() const
+    {
+        return Vec4(x, y, z, 0.0f);
+    }
+
     /// @brief Assigns the values of another Vec3 object to this Vec3 object.
     /// @param[in] other The other Vec3 object whose values will be assigned to this Vec3 object.
     /// @return A reference to this Vec3 object, after the assignment.
