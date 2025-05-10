@@ -23,5 +23,9 @@ int main()
     Mat4 mat = Mat4(3.0f);
     std::cout << mat << std::endl;
 
+    std::cout << Mat4::IDENTITY << std::endl;
+
+    std::cout << Mat4::Translate(Vec3::FORWARD * 5.0f) << std::endl;
+
     return EXIT_SUCCESS;
 }

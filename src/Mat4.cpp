@@ -28,6 +28,30 @@ Mat4::Mat4(float diagonal)
 
 // Public Methods
 
+Vec4 Mat4::XBasis() const
+{
+    auto column = internal_mat[0];
+    return Vec4{ column[0], column[1], column[2], column[3] };
+}
+
+Vec4 Mat4::YBasis() const
+{
+    auto column = internal_mat[1];
+    return Vec4{ column[0], column[1], column[2], column[3] };
+}
+
+Vec4 Mat4::ZBasis() const
+{
+    auto column = internal_mat[2];
+    return Vec4{ column[0], column[1], column[2], column[3] };
+}
+
+Vec4 Mat4::Translation() const
+{
+    auto column = internal_mat[3];
+    return Vec4{ column[0], column[1], column[2], column[3] };
+}
+
 // Protected Fields
 
 // Protected Methods
