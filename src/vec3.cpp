@@ -88,7 +88,7 @@ Vec3& Vec3::operator+=(const Vec3 other)
     x += other.x;
     y += other.y;
     z += other.z;
-    return *this;
+    return *this; // Return ref to allow chaining assignment operations
 }
 
 Vec3& Vec3::operator-=(const Vec3 other)
@@ -96,7 +96,7 @@ Vec3& Vec3::operator-=(const Vec3 other)
     x -= other.x;
     y -= other.y;
     z -= other.z;
-    return *this;
+    return *this; // Return ref to allow chaining assignment operations
 }
 
 Vec3& Vec3::operator*=(const float scalar)
@@ -104,7 +104,7 @@ Vec3& Vec3::operator*=(const float scalar)
     x *= scalar;
     y *= scalar;
     z *= scalar;
-    return *this;
+    return *this; // Return ref to allow chaining assignment operations
 }
 
 Vec3& Vec3::operator/=(const float scalar)
@@ -112,7 +112,7 @@ Vec3& Vec3::operator/=(const float scalar)
     x /= scalar;
     y /= scalar;
     z /= scalar;
-    return *this;
+    return *this; // Return ref to allow chaining assignment operations
 }
 
 unsigned int Vec3::L0Norm() const

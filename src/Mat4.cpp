@@ -29,6 +29,12 @@ Mat4::Mat4(float diagonal)
 
 // Public Methods
 
+Mat4& Mat4::operator*=(const Mat4& other)
+{
+    internal_mat = internal_mat * other.internal_mat;
+    return *this; // Return ref to allow chaining assignment operations
+}
+
 Mat4 Mat4::Translated(const Vec3& translation) const
 {
     return glm::translate(internal_mat, static_cast<glm::vec3>(translation));

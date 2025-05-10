@@ -55,6 +55,22 @@ public:
 
     // Public Methods
 
+    /// @brief Overloads the multiplication assignment operator to multiply this matrix by another matrix.
+    /// @details This method performs standard matrix multiplication and assigns the result to this matrix.
+    /// @param[in] other The matrix to multiply with this matrix.
+    /// @returns A reference to this matrix after the multiplication.
+    Mat4& operator*=(const Mat4& other);
+
+    /// @brief Performs component-wise multiplication of two matrices.
+    /// @details Multiplies each component of lhs with the corresponding component of rhs.
+    /// @param lhs The first matrix.
+    /// @param rhs The second matrix.
+    /// @returns A new matrix with each component being the product of the corresponding components.
+    static inline Mat4 Hadamard(const Mat4& lhs, const Mat4& rhs)
+    {
+        return Mat4(glm::matrixCompMult(lhs.internal_mat, rhs.internal_mat));
+    }
+
     /// @brief Returns a new matrix with translation applied to this matrix.
     /// @param translation The translation vector to apply.
     /// @return A new matrix representing this matrix with the translation applied.
@@ -150,5 +166,15 @@ private:
 
     // Private Methods
 };
+
+/// @brief Overloads the multiplication operator to multiply two matrices.
+/// @details Performs standard matrix multiplication (not component-wise).
+/// @param[in] lhs The left-hand side matrix operand.
+/// @param[in] rhs The right-hand side matrix operand.
+/// @returns A new matrix representing the matrix product of lhs and rhs.
+inline Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
+{
+    return Mat4(lhs.internal_mat * rhs.internal_mat);
+}
 
 } // namespace velecs::math
