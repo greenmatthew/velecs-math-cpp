@@ -129,6 +129,11 @@ float Vec2::L2Norm() const
     return sqrt(x * x + y * y);
 }
 
+float Vec2::LInfNorm() const
+{
+    return std::max(std::abs(x), std::abs(y));
+}
+
 Vec2 Vec2::Normalize() const
 {
     float magnitude = L2Norm();
@@ -169,12 +174,12 @@ Vec2 Vec2::Clamp(const Vec2 vec, const Vec2 min, const Vec2 max)
     );
 }
 
-Vec2 Vec2::Lerp(const Vec2 vec1, const Vec2 vec2, float t)
+Vec2 Vec2::Lerp(const Vec2 a, const Vec2 b, float t)
 {
     return Vec2
     (
-        vec1.x + t * (vec2.x - vec1.x),
-        vec1.y + t * (vec2.y - vec1.y)
+        a.x + t * (b.x - a.x),
+        a.y + t * (b.y - a.y)
     );
 }
 
@@ -192,30 +197,6 @@ std::string Vec2::ToString() const
     std::ostringstream oss;
     oss << '(' << x << ", " << y << ')';
     return oss.str();
-}
-
-Vec2 operator+(const Vec2 lhs, const Vec2 rhs)
-{
-    return Vec2(lhs.x + rhs.x, lhs.y + rhs.x);
-}
-
-Vec2 operator-(const Vec2 lhs, const Vec2 rhs)
-{
-    return Vec2{lhs.x - rhs.x, lhs.y - rhs.y};
-}
-
-Vec2 operator*(const Vec2 lhs, const float rhs)
-{
-    return Vec2{lhs.x * rhs, lhs.y * rhs};
-}
-
-Vec2 operator/(const Vec2 lhs, const float rhs)
-{
-    if (rhs == 0)
-    {
-        throw std::runtime_error("Division by zero error");
-    }
-    return Vec2{lhs.x / rhs, lhs.y / rhs};
 }
 
 // Protected Fields

@@ -131,6 +131,11 @@ public:
     /// @returns The L2 norm.
     float L2Norm() const;
 
+    /// @brief Computes the L∞ norm (maximum absolute value) of this Vec2.
+    /// @details The L∞ norm is the maximum absolute value among all components.
+    /// @returns The maximum absolute value of any component.
+    float LInfNorm() const;
+
     /// @brief Alias for L2Norm, computes the L2 norm (magnitude) of this Vec2.
     /// @returns The L2 norm.
     inline float Norm() const { return L2Norm(); }
@@ -201,6 +206,15 @@ public:
     /// @returns The angle between the vectors in degrees.
     inline static float AngleDeg(const Vec2 a, const Vec2 b)
     {
+        return Angle(a, b) * RAD_TO_DEG;  // convert radians to degrees
+    }
+
+    /// @brief Computes the angle between two vectors in degrees.
+    /// @param a The first vector.
+    /// @param b The second vector.
+    /// @returns The angle between the vectors in degrees.
+    inline static float AngleDeg(const Vec2 a, const Vec2 b)
+    {
         return Angle(a, b) * (180.0f / PI);  // convert radians to degrees
     }
 
@@ -233,25 +247,41 @@ private:
 /// @param[in] lhs The first Vec2 operand.
 /// @param[in] rhs The second Vec2 operand.
 /// @return A new Vec2 that is the sum of the two Vec2 operands.
-Vec2 operator+(const Vec2 lhs, const Vec2 rhs);
+inline Vec2 operator+(const Vec2 lhs, const Vec2 rhs)
+{
+    return Vec2{lhs.x + rhs.x, lhs.y + rhs.y};
+}
 
 /// @brief Subtracts one Vec2 from another.
 /// @param[in] lhs The Vec2 to subtract from.
 /// @param[in] rhs The Vec2 to be subtracted.
 /// @return A new Vec2 that is the difference of the two Vec2 operands.
-Vec2 operator-(const Vec2 lhs, const Vec2 rhs);
+inline Vec2 operator-(const Vec2 lhs, const Vec2 rhs)
+{
+    return Vec2{lhs.x - rhs.x, lhs.y - rhs.y};
+}
 
 /// @brief Multiplies a Vec2 vector by a scalar.
 /// @param[in] lhs The Vec2 operand.
 /// @param[in] rhs The scalar value to multiply with.
 /// @return A new Vec2 that is the product of the Vec2 and the scalar.
-Vec2 operator*(const Vec2 lhs, const float rhs);
+inline Vec2 operator*(const Vec2 lhs, const float rhs)
+{
+    return Vec2{lhs.x * rhs, lhs.y * rhs};
+}
 
 /// @brief Divides a Vec2 vector by a scalar.
 /// @param[in] lhs The Vec2 operand.
 /// @param[in] rhs The scalar value to divide by.
 /// @return A new Vec2 that is the quotient of the Vec2 divided by the scalar.
-Vec2 operator/(const Vec2 lhs, const float rhs);
+inline Vec2 operator/(const Vec2 lhs, const float rhs)
+{
+    if (rhs == 0)
+    {
+        throw std::runtime_error("Division by zero error");
+    }
+    return Vec2{lhs.x / rhs, lhs.y / rhs};
+}
 
 /// @brief Multiplies a scalar value by a Vec2 vector.
 /// @param[in] lhs The scalar value.

@@ -59,16 +59,16 @@ public:
     /// @param[in] z The z-component.
     Vec3(const float x, const float y, const float z);
 
-    /// @brief Constructs a Vec3 from a Vec2.
-    /// @details The x and y components are initialized from the Vec2, while the z-component is set to 0.0f.
-    /// @param[in] vec2 The Vec2 from which to initialize the x and y components.
-    Vec3(const Vec2 vec2);
+    /// @brief Copy constructor. Constructs a new Vec3 with the same values as the specified Vec3.
+    /// @param[in] other The Vec3 to copy.
+    Vec3(const Vec3 &other);
 
-    /// @brief Constructs a Vec3 from a Vec2 and a specified z-component.
-    /// @details The x and y components are initialized from the Vec2, while the z-component is set to the specified value.
+    /// @brief Constructs a Vec3 from a Vec2 and an optional z-component.
+    /// @details The x and y components are initialized from the Vec2, while the z-component 
+    ///          is set to the specified value (defaulting to 0.0f).
     /// @param[in] vec2 The Vec2 from which to initialize the x and y components.
-    /// @param[in] z The z-component.
-    Vec3(const Vec2 vec2, const float z);
+    /// @param[in] z The z-component, defaults to 0.0f.
+    Vec3(const Vec2 vec2, const float z = 0.0f);
 
     /// @brief Constructs a Vec3 with a specified x-component and a Vec2 for the y and z components.
     /// @details The x-component is set to the specified value, while the y and z components are initialized from the Vec2.
@@ -139,6 +139,11 @@ public:
     /// @brief Computes the L2 norm (magnitude) of this Vec3.
     /// @returns The L2 norm.
     float L2Norm() const;
+
+    /// @brief Computes the L∞ norm (maximum absolute value) of this Vec3.
+    /// @details The L∞ norm is the maximum absolute value among all components.
+    /// @returns The maximum absolute value of any component.
+    float LInfNorm() const;
 
     /// @brief Alias for L2Norm, computes the L2 norm (magnitude) of this Vec3.
     /// @returns The L2 norm.
@@ -218,7 +223,7 @@ public:
     /// @returns The angle between the vectors in degrees.
     inline static float AngleDeg(const Vec3 a, const Vec3 b)
     {
-        return Angle(a, b) * (180.0f / PI);  // convert radians to degrees
+        return Angle(a, b) * RAD_TO_DEG;  // convert radians to degrees
     }
 
     /// @brief Converts the Vec3 to a string representation.
@@ -251,28 +256,44 @@ private:
 /// @param[in] lhs The left-hand side Vec3 operand.
 /// @param[in] rhs The right-hand side Vec3 operand.
 /// @returns A new Vec3 object representing the sum of the two Vec3 operands.
-Vec3 operator+(const Vec3 lhs, const Vec3 rhs);
+inline Vec3 operator+(const Vec3 lhs, const Vec3 rhs)
+{
+    return Vec3{lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
+}
 
 /// @brief Overloads the subtraction operator to subtract one Vec3 from another.
 /// @details This method subtracts the corresponding components of the two Vec3 objects.
 /// @param[in] lhs The left-hand side Vec3 operand.
 /// @param[in] rhs The right-hand side Vec3 operand.
 /// @returns A new Vec3 object representing the difference of the two Vec3 operands.
-Vec3 operator-(const Vec3 lhs, const Vec3 rhs);
+inline Vec3 operator-(const Vec3 lhs, const Vec3 rhs)
+{
+    return Vec3{lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
+}
 
 /// @brief Overloads the multiplication operator to multiply a Vec3 object by a scalar value.
 /// @details This method multiplies each component of the Vec3 object by the scalar value.
 /// @param[in] lhs The Vec3 object to be multiplied.
 /// @param[in] rhs The scalar value by which to multiply the Vec3 object.
 /// @returns A new Vec3 object representing the product of the Vec3 object and the scalar value.
-Vec3 operator*(const Vec3 lhs, const float rhs);
+inline Vec3 operator*(const Vec3 lhs, const float rhs)
+{
+    return Vec3{lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
+}
 
 /// @brief Overloads the division operator to divide a Vec3 by a scalar.
 /// @details This method divides the components of the Vec3 by the specified scalar value.
 /// @param[in] lhs The Vec3 operand.
 /// @param[in] rhs The scalar operand.
 /// @returns A new Vec3 object representing the quotient of the Vec3 and scalar operands.
-Vec3 operator/(const Vec3 lhs, const float rhs);
+inline Vec3 operator/(const Vec3 lhs, const float rhs)
+{
+    if (rhs == 0)
+    {
+        throw std::runtime_error("Division by zero error");
+    }
+    return Vec3{lhs.x / rhs, lhs.y / rhs, lhs.z / rhs};
+}
 
 /// @brief Overloads the multiplication operator to multiply a scalar value by a Vec3 object.
 /// @details This method multiplies each component of the Vec3 object by the scalar value. 

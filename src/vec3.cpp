@@ -40,8 +40,8 @@ const Vec3 Vec3::K            {  0.0f,  0.0f,  1.0f };
 Vec3::Vec3(const float x, const float y, const float z)
     : x(x), y(y), z(z) {}
 
-Vec3::Vec3(const Vec2 vec2)
-    : x(vec2.x), y(vec2.y), z(0.0f) {}
+Vec3::Vec3(const Vec3 &other)
+    : x(other.x), y(other.y), z(other.z) {}
 
 Vec3::Vec3(const Vec2 vec2, const float z)
     : x(vec2.x), y(vec2.y), z(z) {}
@@ -131,6 +131,11 @@ float Vec3::L2Norm() const
     return std::sqrt(x*x + y*y + z*z);
 }
 
+float Vec3::LInfNorm() const
+{
+    return std::max(std::max(std::abs(x), std::abs(y)), std::abs(z));
+}
+
 Vec3 Vec3::Normalize() const
 {
     float magnitude = L2Norm();
@@ -208,30 +213,6 @@ std::string Vec3::ToString() const
     std::ostringstream oss;
     oss << '(' << x << ", " << y << ", " << z << ')';
     return oss.str();
-}
-
-Vec3 operator+(const Vec3 lhs, const Vec3 rhs)
-{
-    return Vec3{lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
-}
-
-Vec3 operator-(const Vec3 lhs, const Vec3 rhs)
-{
-    return Vec3{lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
-}
-
-Vec3 operator*(const Vec3 lhs, const float rhs)
-{
-    return Vec3{lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
-}
-
-Vec3 operator/(const Vec3 lhs, const float rhs)
-{
-    if (rhs == 0)
-    {
-        throw std::runtime_error("Division by zero error");
-    }
-    return Vec3{lhs.x / rhs, lhs.y / rhs, lhs.z / rhs};
 }
 
 // Protected Fields
