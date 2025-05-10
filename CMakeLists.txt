@@ -15,6 +15,7 @@ option(VELECS_MATH_BUILD_TESTS "Build test executable for velecs-math" OFF)
 set(LIB_SOURCES
     src/Vec2.cpp
     src/Vec3.cpp
+    src/Vec4.cpp
     src/Mat4.cpp
     src/GLMUtility.cpp
 )

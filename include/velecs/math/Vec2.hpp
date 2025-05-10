@@ -209,15 +209,6 @@ public:
         return Angle(a, b) * RAD_TO_DEG;  // convert radians to degrees
     }
 
-    /// @brief Computes the angle between two vectors in degrees.
-    /// @param a The first vector.
-    /// @param b The second vector.
-    /// @returns The angle between the vectors in degrees.
-    inline static float AngleDeg(const Vec2 a, const Vec2 b)
-    {
-        return Angle(a, b) * (180.0f / PI);  // convert radians to degrees
-    }
-
     /// @brief Converts the Vec2 to a string representation.
     /// @returns A string representation of the Vec2.
     std::string ToString() const;

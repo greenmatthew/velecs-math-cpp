@@ -62,7 +62,7 @@ Vec4::Vec4(const float x, const float y, const Vec2 vec2)
 
 
 
-Vec4::Vec4(const Vec3 vec3, const float w = 0)
+Vec4::Vec4(const Vec3 vec3, const float w)
     : x(vec3.x), y(vec3.y), z(vec3.z), w(w) {}
 
 Vec4::Vec4(const float x, const Vec3 vec3)
