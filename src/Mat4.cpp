@@ -9,6 +9,7 @@
 /// Proprietary and confidential
 
 #include "velecs/math/Mat4.hpp"
+#include "velecs/math/Vec4.hpp"
 
 namespace velecs::math {
 

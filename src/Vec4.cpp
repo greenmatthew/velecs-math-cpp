@@ -8,7 +8,6 @@
 /// Unauthorized copying of this file, via any medium is strictly prohibited
 /// Proprietary and confidential
 
-#include "velecs/math/Consts.hpp"
 #include "velecs/math/Vec4.hpp"
 #include "velecs/math/Vec3.hpp"
 #include "velecs/math/Vec2.hpp"

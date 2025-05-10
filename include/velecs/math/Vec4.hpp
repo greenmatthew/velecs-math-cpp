@@ -12,9 +12,9 @@
 
 #include "velecs/math/Consts.hpp"
 
-#include <glm/vec4.hpp>
-
 #include <iostream>
+
+#include <glm/vec4.hpp>
 
 namespace velecs::math {
 

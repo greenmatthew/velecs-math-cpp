@@ -11,14 +11,16 @@
 #pragma once
 
 #include "velecs/math/Consts.hpp"
-
-#include <glm/vec3.hpp>
+#include "velecs/math/Vec4.hpp"
 
 #include <iostream>
+
+#include <glm/vec3.hpp>
 
 namespace velecs::math {
 
 struct Vec2;
+struct Vec4;
 
 /// @struct Vec3
 /// @brief Brief description.

@@ -10,16 +10,17 @@
 
 #pragma once
 
+#include "velecs/math/Vec3.hpp"
+
 #include <iostream>
 #include <iomanip>
 
 #include <glm/mat4x4.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
-#include "velecs/math/Vec4.hpp"
-#include "velecs/math/Vec3.hpp"
-
 namespace velecs::math {
+
+struct Vec4;
 
 /// @struct Mat4
 /// @brief A wrapper struct for glm::mat4 to provide consistent interfaces with other math classes.

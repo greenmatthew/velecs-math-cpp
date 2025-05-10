@@ -10,7 +10,6 @@
 
 #include "velecs/math/Vec2.hpp"
 #include "velecs/math/Vec3.hpp"
-#include "velecs/math/Consts.hpp"
 
 #include <sstream>
 #include <algorithm>
