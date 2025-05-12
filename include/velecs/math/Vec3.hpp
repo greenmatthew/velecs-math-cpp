@@ -59,17 +59,22 @@ public:
     /// @param[in] x The x-component.
     /// @param[in] y The y-component.
     /// @param[in] z The z-component.
-    Vec3(const float x, const float y, const float z);
+    inline Vec3(const float x, const float y, const float z)
+        : x(x), y(y), z(z) {}
 
     /// @brief Copy constructor. Constructs a new Vec3 with the same values as the specified Vec3.
     /// @param[in] other The Vec3 to copy.
-    Vec3(const Vec3 &other);
+    inline Vec3(const Vec3 &other)
+        : x(other.x), y(other.y), z(other.z) {}
 
     /// @brief Constructs a Vec3 from a glm::vec3.
     /// @details Creates a new Vec3 object with components initialized from the given glm::vec3.
     ///          This allows for easy conversion from GLM's vector type to the velecs math library.
     /// @param[in] other The glm::vec3 to copy components from.
-    Vec3(const glm::vec3 &other);
+    inline Vec3(const glm::vec3 &other)
+        : x(other.x), y(other.y), z(other.z) {}
+
+
 
     /// @brief Constructs a Vec3 from a Vec2 and an optional z-component.
     /// @details The x and y components are initialized from the Vec2, while the z-component 
@@ -91,7 +96,10 @@ public:
 
     /// @brief Converts the Vec3 to a glm::vec3.
     /// @returns A glm::vec3 with the same components as this Vec3.
-    operator glm::vec3() const;
+    inline operator glm::vec3() const
+    {
+        return glm::vec3(x, y, z);
+    }
 
     /// @brief Converts this Vec3 to a homogeneous point (w=1).
     /// @details Creates a Vec4 with the components of this Vec3 and sets w=1.
@@ -112,62 +120,145 @@ public:
     /// @brief Assigns the values of another Vec3 object to this Vec3 object.
     /// @param[in] other The other Vec3 object whose values will be assigned to this Vec3 object.
     /// @return A reference to this Vec3 object, after the assignment.
-    Vec3& operator=(const Vec3 other);
+    inline Vec3& operator=(const Vec3 other)
+    {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Checks if this Vec3 is equal to the specified Vec3.
     /// @param[in] other The Vec3 to compare with.
     /// @return True if the Vec3s are equal, false otherwise.
-    bool operator==(const Vec3 other) const;
+    inline bool operator==(const Vec3 other) const
+    {
+        return x == other.x &&
+            y == other.y &&
+            z == other.z;
+    }
 
     /// @brief Checks if this Vec3 is not equal to the specified Vec3.
     /// @param[in] other The Vec3 to compare with.
     /// @return True if the Vec3s are not equal, false otherwise.
-    bool operator!=(const Vec3 other) const;
+    inline bool operator!=(const Vec3 other) const
+    {
+        return x != other.x ||
+            y != other.y ||
+            z != other.z;
+    }
 
     /// @brief Negates this Vec3.
     /// @return A new Vec3 that is the negation of this Vec3.
-    Vec3 operator-() const;
+    inline Vec3 operator-() const
+    {
+        return Vec3(-x, -y, -z);
+    }
 
     /// @brief Overloads the addition assignment operator to add another Vec3 to this Vec3 and assign the result to this Vec3.
     /// @details This method adds the corresponding components of the other Vec3 to this Vec3 and assigns the result to this Vec3.
     /// @param[in] other The other Vec3 to add to this Vec3.
     /// @returns A reference to this Vec3 after the addition
-    Vec3& operator+=(const Vec3 other);
+    inline Vec3& operator+=(const Vec3 other)
+    {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Overloads the subtraction assignment operator to subtract another Vec3 from this Vec3 and assign the result to this Vec3.
     /// @details This method subtracts the corresponding components of the other Vec3 from this Vec3 and assigns the result to this Vec3.
     /// @param[in] other The other Vec3 to subtract from this Vec3.
     /// @returns A reference to this Vec3 after the subtraction.
-    Vec3& operator-=(const Vec3 other);
+    inline Vec3& operator-=(const Vec3 other)
+    {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Overloads the multiplication assignment operator to multiply this Vec3 by a scalar and assign the result to this Vec3.
     /// @details This method multiplies the components of this Vec3 by the specified scalar value and assigns the result to this Vec3.
     /// @param[in] scalar The scalar value to multiply this Vec3 by.
     /// @returns A reference to this Vec3 after the multiplication.
-    Vec3& operator*=(const float scalar);
+    inline Vec3& operator*=(const float scalar)
+    {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Overloads the division assignment operator to divide this Vec3 by a scalar and assign the result to this Vec3.
     /// @details This method divides the components of this Vec3 by the specified scalar value and assigns the result to this Vec3.
     /// @param[in] scalar The scalar value to divide this Vec3 by.
     /// @returns A reference to this Vec3 after the division.
-    Vec3& operator/=(const float scalar);
+    inline Vec3& operator/=(const float scalar)
+    {
+        x /= scalar;
+        y /= scalar;
+        z /= scalar;
+        return *this; // Return ref to allow chaining assignment operations
+    }
+
+    /// @brief Provides array-like access to vector components.
+    /// @details Allows accessing vector components by index, where [0]=x, [1]=y, [2]=z.
+    ///          Includes bounds checking to prevent invalid memory access.
+    /// @param index The index of the component to access (0-2).
+    /// @returns A reference to the component at the specified index.
+    /// @throws std::out_of_range if the index is out of bounds (not 0-2).
+    inline float& operator[](int index)
+    {
+        if (index >= 0 && index < 3) {
+            return (&x)[index]; // Access array of 3 floats starting at address of x
+        }
+        throw std::out_of_range("Vec3 index out of range");
+    }
+
+    /// @brief Provides const array-like access to vector components.
+    /// @details Allows read-only access to vector components by index, where [0]=x, [1]=y, [2]=z.
+    ///          Includes bounds checking to prevent invalid memory access.
+    /// @param index The index of the component to access (0-2).
+    /// @returns A const reference to the component at the specified index.
+    /// @throws std::out_of_range if the index is out of bounds (not 0-2).
+    inline const float& operator[](int index) const
+    {
+        if (index >= 0 && index < 3) {
+            return (&x)[index]; // Access array of 3 floats starting at address of x
+        }
+        throw std::out_of_range("Vec3 index out of range");
+    }
 
     /// @brief Computes the L0 norm of this Vec3, which is the count of non-zero components.
     /// @returns The L0 norm.
-    unsigned int L0Norm() const;
+    inline unsigned int L0Norm() const
+    {
+        return (x != 0 ? 1 : 0) + (y != 0 ? 1 : 0) + (z != 0 ? 1 : 0);
+    }
 
     /// @brief Computes the L1 norm of this Vec3, which is the sum of the absolute values of the components.
     /// @returns The L1 norm.
-    float L1Norm() const;
+    inline float L1Norm() const
+    {
+        return std::abs(x) + std::abs(y) + std::abs(z);
+    }
 
     /// @brief Computes the L2 norm (magnitude) of this Vec3.
     /// @returns The L2 norm.
-    float L2Norm() const;
+    inline float L2Norm() const
+    {
+        return std::sqrt(x*x + y*y + z*z);
+    }
 
     /// @brief Computes the L∞ norm (maximum absolute value) of this Vec3.
     /// @details The L∞ norm is the maximum absolute value among all components.
     /// @returns The maximum absolute value of any component.
-    float LInfNorm() const;
+    inline float LInfNorm() const
+    {
+        return std::max(std::max(std::abs(x), std::abs(y)), std::abs(z));
+    }
 
     /// @brief Alias for L2Norm, computes the L2 norm (magnitude) of this Vec3.
     /// @returns The L2 norm.
@@ -185,35 +276,58 @@ public:
     /// @brief Projects the vector onto the i basis vector (x-axis).
     /// @returns The projection of the vector onto the i basis vector,
     /// resulting in a vector along the x-axis with the same x component as the original vector.
-    Vec3 ProjOntoI() const;
+    inline Vec3 ProjOntoI() const
+    {
+        return Vec3(this->x, 0.0f, 0.0f);
+    }
 
     /// @brief Projects the vector onto the j basis vector (y-axis).
     /// @returns The projection of the vector onto the j basis vector,
     /// resulting in a vector along the y-axis with the same y component as the original vector.
-    Vec3 ProjOntoJ() const;
+    inline Vec3 ProjOntoJ() const
+    {
+        return Vec3(0.0f, this->y, 0.0f);
+    }
 
     /// @brief Projects the vector onto the k basis vector (z-axis).
     /// @returns The projection of the vector onto the k basis vector,
     /// resulting in a vector along the z-axis with the same z component as the original vector.
-    Vec3 ProjOntoK() const;
+    inline Vec3 ProjOntoK() const
+    {
+        return Vec3(0.0f, 0.0f, this->z);
+    }
 
     /// @brief Computes the dot product of two Vec3 objects.
     /// @param a The first Vec3 object.
     /// @param b The second Vec3 object.
     /// @returns The dot product of a and b.
-    static float Dot(const Vec3 a, const Vec3 b);
+    inline static float Dot(const Vec3 a, const Vec3 b)
+    {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
 
     /// @brief Computes the cross product of two Vec3 objects.
     /// @param a The first Vec3 object.
     /// @param b The second Vec3 object.
     /// @returns The cross product of a and b.
-    static Vec3 Cross(const Vec3 a, const Vec3 b);
+    inline static Vec3 Cross(const Vec3 a, const Vec3 b)
+    {
+        return Vec3
+        (
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
+    }
 
     /// @brief Computes the Hadamard product of two Vec3 objects.
     /// @param a The first Vec3 object.
     /// @param b The second Vec3 object.
     /// @returns The Hadamard product of a and b.
-    static Vec3 Hadamard(const Vec3 a, const Vec3 b);
+    inline static Vec3 Hadamard(const Vec3 a, const Vec3 b)
+    {
+        return Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
 
     /// @brief Alias for Hadamard, computes the element-wise multiplication of two Vec3s.
     /// @param a The first Vec3.
@@ -233,7 +347,15 @@ public:
     /// @param b The second Vec3.
     /// @param t The interpolation factor. A value of 0 returns a, and a value of 1 returns b.
     /// @returns The interpolated Vec3.
-    static Vec3 Lerp(const Vec3 a, const Vec3 b, float t);
+    inline static Vec3 Lerp(const Vec3 a, const Vec3 b, float t)
+    {
+        return Vec3
+        (
+            a.x + t * (b.x - a.x),
+            a.y + t * (b.y - a.y),
+            a.z + t * (b.z - a.z)
+        );
+    }
 
     /// @brief Computes the angle between two vectors in radians.
     /// @param a The first vector.

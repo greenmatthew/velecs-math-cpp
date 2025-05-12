@@ -16,7 +16,6 @@
 #include <ostream>
 
 #include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
 
 namespace velecs::math {
 
@@ -50,16 +49,23 @@ public:
 
     // Constructors and Destructors
 
-    Vec2();
-
     /// @brief Constructs a Vec2 with the specified coordinates.
     /// @param[in] x The x-coordinate.
     /// @param[in] y The y-coordinate.
-    Vec2(const float x, const float y);
+    inline Vec2(const float x, const float y)
+        : x(x), y(y) {}
 
     /// @brief Copy constructor. Constructs a new Vec2 with the same values as the specified Vec2.
     /// @param[in] other The Vec2 to copy.
-    Vec2(const Vec2 &other);
+    inline Vec2(const Vec2 &other)
+        : x(other.x), y(other.y) {}
+    
+    /// @brief Constructs a Vec2 from a glm::vec2.
+    /// @details Creates a new Vec2 object with components initialized from the given glm::vec2.
+    ///          This allows for easy conversion from GLM's vector type to the velecs math library.
+    /// @param[in] other The glm::vec2 to copy components from.
+    inline Vec2(const glm::vec2 &other)
+        : x(other.x), y(other.y) {}
 
     /// @brief Default deconstructor.
     ~Vec2() = default;
@@ -68,73 +74,142 @@ public:
 
     /// @brief Converts the Vec2 to a glm::vec2.
     /// @returns A glm::vec2 with the same components as this Vec2.
-    operator glm::vec2() const;
-
-    /// @brief Converts the Vec2 to a Vec3.
-    /// @details The z-component of the returned Vec3 is set to 0.0f.
-    /// @returns A Vec3 with the x and y components from this Vec2, and z-component set to 0.0f.
-    operator Vec3() const;
-
-    /// @brief Converts the Vec2 to a glm::vec3.
-    /// @details The z-component of the returned glm::vec3 is set to 0.0f.
-    /// @returns A glm::vec3 with the x and y components from this Vec2, and z-component set to 0.0f.
-    operator glm::vec3() const;
+    inline operator glm::vec2() const
+    {
+        return glm::vec2(x, y);
+    }
 
     /// @brief Assigns the values of another Vec2 object to this Vec2 object.
     /// @param[in] other The other Vec2 object whose values will be assigned to this Vec2 object.
     /// @return A reference to this Vec2 object, after the assignment.
-    Vec2& operator=(const Vec2 other);
+    inline Vec2& operator=(const Vec2 other)
+    {
+        x = other.x;
+        y = other.y;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Checks if this Vec2 is equal to the specified Vec2.
     /// @param[in] other The Vec2 to compare with.
     /// @return True if the Vec2s are equal, false otherwise.
-    bool operator==(const Vec2 other) const;
+    inline bool operator==(const Vec2 other) const
+    {
+        return x == other.x &&
+            y == other.y;
+    }
 
     /// @brief Checks if this Vec2 is not equal to the specified Vec2.
     /// @param[in] other The Vec2 to compare with.
     /// @return True if the Vec2s are not equal, false otherwise.
-    bool operator!=(const Vec2 other) const;
+    inline bool operator!=(const Vec2 other) const
+    {
+        return x != other.x ||
+            y != other.y;
+    }
 
     /// @brief Negates this Vec2 object, producing a new Vec2 object with the negated values.
     /// @return A new Vec2 object with the negated values of this Vec2 object.
-    Vec2 operator-() const;
+    inline Vec2 operator-() const
+    {
+        return Vec2(-x, -y);
+    }
 
     /// @brief Adds another Vec2 to this Vec2 and assigns the result to this Vec2.
     /// @param[in] other The other Vec2.
     /// @return A reference to this Vec2.
-    Vec2& operator+=(const Vec2 other);
+    inline Vec2& operator+=(const Vec2 other)
+    {
+        x += other.x;
+        y += other.y;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Subtracts another Vec2 from this Vec2 and assigns the result to this Vec2.
     /// @param[in] other The other Vec2.
     /// @return A reference to this Vec2.
-    Vec2& operator-=(const Vec2 other);
+    inline Vec2& operator-=(const Vec2 other)
+    {
+        x -= other.x;
+        y -= other.y;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Multiplies this Vec2 by a scalar and assigns the result to this Vec2.
     /// @param[in] scalar The scalar value.
     /// @return A reference to this Vec2.
-    Vec2& operator*=(const float scalar);
+    inline Vec2& operator*=(const float scalar)
+    {
+        x *= scalar;
+        y *= scalar;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Divides this Vec2 by a scalar and assigns the result to this Vec2.
     /// @param[in] scalar The scalar value.
     /// @return A reference to this Vec2.
-    Vec2& operator/=(const float scalar);
+    inline Vec2& operator/=(const float scalar)
+    {
+        x /= scalar;
+        y /= scalar;
+        return *this; // Return ref to allow chaining assignment operations
+    }
+
+    /// @brief Provides array-like access to vector components.
+    /// @details Allows accessing vector components by index, where [0]=x, [1]=y.
+    ///          Includes bounds checking to prevent invalid memory access.
+    /// @param index The index of the component to access (0-1).
+    /// @returns A reference to the component at the specified index.
+    /// @throws std::out_of_range if the index is out of bounds (not 0-1).
+    inline float& operator[](int index)
+    {
+        if (index >= 0 && index < 2) {
+            return (&x)[index]; // Access array of 2 floats starting at address of x
+        }
+        throw std::out_of_range("Vec2 index out of range");
+    }
+
+    /// @brief Provides const array-like access to vector components.
+    /// @details Allows read-only access to vector components by index, where [0]=x, [1]=y.
+    ///          Includes bounds checking to prevent invalid memory access.
+    /// @param index The index of the component to access (0-1).
+    /// @returns A const reference to the component at the specified index.
+    /// @throws std::out_of_range if the index is out of bounds (not 0-1).
+    inline const float& operator[](int index) const
+    {
+        if (index >= 0 && index < 2) {
+            return (&x)[index]; // Access array of 2 floats starting at address of x
+        }
+        throw std::out_of_range("Vec2 index out of range");
+    }
 
     /// @brief Computes the L0 norm of this Vec2, which is the count of non-zero components.
     /// @returns The L0 norm.
-    unsigned int L0Norm() const;
+    inline unsigned int L0Norm() const
+    {
+        return (x != 0 ? 1 : 0) + (y != 0 ? 1 : 0);
+    }
 
     /// @brief Computes the L1 norm of this Vec2, which is the sum of the absolute values of the components.
     /// @returns The L1 norm.
-    float L1Norm() const;
+    inline float L1Norm() const
+    {
+        return abs(x) + abs(y);
+    }
 
     /// @brief Computes the L2 norm (magnitude) of this Vec2.
     /// @returns The L2 norm.
-    float L2Norm() const;
+    inline float L2Norm() const
+    {
+        return sqrt(x * x + y * y);
+    }
 
     /// @brief Computes the L∞ norm (maximum absolute value) of this Vec2.
     /// @details The L∞ norm is the maximum absolute value among all components.
     /// @returns The maximum absolute value of any component.
-    float LInfNorm() const;
+    inline float LInfNorm() const
+    {
+        return std::max(std::abs(x), std::abs(y));
+    }
 
     /// @brief Alias for L2Norm, computes the L2 norm (magnitude) of this Vec2.
     /// @returns The L2 norm.
@@ -146,33 +221,48 @@ public:
 
     /// @brief Normalizes this Vec2, making its magnitude equal to 1.
     /// @returns The normalized Vec2.
-    Vec2 Normalize() const;
+    inline Vec2 Normalize() const;
 
     /// @brief Projects the vector onto the i basis vector (x-axis).
     /// @returns The projection of the vector onto the i basis vector.
-    Vec2 ProjOntoI() const;
+    inline Vec2 ProjOntoI() const
+    {
+        return Vec2(this->x, 0.0f);
+    }
 
     /// @brief Projects the vector onto the j basis vector (y-axis).
     /// @returns The projection of the vector onto the j basis vector.
-    Vec2 ProjOntoJ() const;
+    inline Vec2 ProjOntoJ() const
+    {
+        return Vec2(0.0f, this->y);
+    }
 
     /// @brief Computes the dot product of two Vec2 objects.
     /// @param a The first Vec2 object.
     /// @param b The second Vec2 object.
     /// @returns The dot product of a and b.
-    static float Dot(const Vec2 a, const Vec2 b);
+    inline static float Dot(const Vec2 a, const Vec2 b)
+    {
+        return a.x * b.x + a.y * b.y;
+    }
 
     /// @brief Computes the cross product of two Vec2 objects.
     /// @param a The first Vec2 object.
     /// @param b The second Vec2 object.
     /// @returns The cross product of a and b.
-    static float Cross(const Vec2 a, const Vec2 b);
+    inline static float Cross(const Vec2 a, const Vec2 b)
+    {
+        return a.x * b.y - a.y * b.x;
+    }
 
     /// @brief Computes the Hadamard product of two Vec2 objects.
     /// @param a The first Vec2 object.
     /// @param b The second Vec2 object.
     /// @returns The Hadamard product of a and b.
-    static Vec2 Hadamard(const Vec2 a, const Vec2 b);
+    inline static Vec2 Hadamard(const Vec2 a, const Vec2 b)
+    {
+        return Vec2(a.x * b.x, a.y * b.y);
+    }
 
     /// @brief Alias for Hadamard, computes the element-wise multiplication of two Vec2s.
     /// @param a The first Vec2.
@@ -192,7 +282,14 @@ public:
     /// @param b The second Vec2.
     /// @param t The interpolation factor. A value of 0 returns a, and a value of 1 returns b.
     /// @returns The interpolated Vec2.
-    static Vec2 Lerp(const Vec2 a, const Vec2 b, float t);
+    inline static Vec2 Lerp(const Vec2 a, const Vec2 b, float t)
+    {
+        return Vec2
+        (
+            a.x + t * (b.x - a.x),
+            a.y + t * (b.y - a.y)
+        );
+    }
 
     /// @brief Computes the angle between two vectors in radians.
     /// @param a The first vector.
