@@ -13,7 +13,7 @@
 #include "velecs/math/Vec3.hpp"
 
 #include <glm/gtc/quaternion.hpp>
-// #include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace velecs::math {
 
@@ -22,12 +22,6 @@ namespace velecs::math {
 const Quat Quat::IDENTITY = Quat(0.0f, 0.0f, 0.0f, 1.0f);
 
 // Constructors and Destructors
-
-Quat::Quat(const glm::quat& quat)
-    : internal_quat(quat) {}
-
-Quat::Quat(const float x, const float y, const float z, const float w)
-    : internal_quat(w, x, y, z) {}
 
 // Public Methods
 
@@ -62,18 +56,18 @@ Quat Quat::FromEulerAnglesDeg(const Vec3& angles)
 
 Vec3 Quat::ToEulerAngles() const
 {
-    // Extract Euler angles from quaternion (result in radians)
-    glm::vec3 eulerAngles = glm::eulerAngles(internal_quat);
-    
-    // Convert to Vec3
-    return Vec3(eulerAngles);
+    return Vec3(glm::eulerAngles(internal_quat));
 }
 
 Vec3 Quat::ToEulerAnglesDeg() const
 {
-    // Get angles in radians, then convert to degrees
-    Vec3 radAngles = ToEulerAngles();
-    return Vec3(radAngles) * RAD_TO_DEG;
+    return ToEulerAngles() * RAD_TO_DEG;
+}
+
+Mat4 Quat::ToMatrix() const
+{
+    // Use GLM's built-in conversion from quaternion to mat4
+    return Mat4(glm::mat4_cast(internal_quat));
 }
 
 // Protected Fields

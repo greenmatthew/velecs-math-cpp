@@ -12,8 +12,7 @@
 
 #include "velecs/math/Mat4.hpp"
 
-#include "glm/gtc/quaternion.hpp"
-#include "glm/ext/quaternion_float.hpp"
+#include <glm/ext/quaternion_float.hpp>
 
 namespace velecs::math {
 
@@ -39,7 +38,8 @@ public:
 
     /// @brief Construct from glm::quat
     /// @param quat The GLM quaternion to copy
-    Quat(const glm::quat& quat);
+    Quat(const glm::quat& quat)
+        : internal_quat(quat) {}
 
     /// @brief Construct a quaternion from components
     /// @param x X component of the quaternion (imaginary i component)
@@ -49,7 +49,8 @@ public:
     /// @note Parameter order follows the common game engine convention (x,y,z,w).
     ///       This differs from mathematical notation and GLM's internal order (w,x,y,z),
     ///       but provides consistency with engines like Unity and Unreal.
-    Quat(const float x, const float y, const float z, const float w);
+    Quat(const float x, const float y, const float z, const float w)
+        : internal_quat(w, x, y, z) {}
 
     /// @brief Default deconstructor.
     ~Quat() = default;
@@ -90,11 +91,7 @@ public:
 
     /// @brief Converts the quaternion to a rotation matrix
     /// @return A Mat4 representing the rotation described by this quaternion
-    inline Mat4 ToMatrix() const
-    {
-        // Use GLM's built-in conversion from quaternion to mat4
-        return Mat4(glm::mat4_cast(internal_quat));
-    }
+    Mat4 ToMatrix() const;
 
 protected:
     // Protected Fields
