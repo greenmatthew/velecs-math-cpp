@@ -62,16 +62,19 @@ public:
     /// @param[in] y The y-component.
     /// @param[in] z The z-component.
     /// @param[in] w The w-component.
-    Vec4(const float x, const float y, const float z, const float w);
+    inline Vec4(const float x, const float y, const float z, const float w)
+        : x(x), y(y), z(z), w(w) {}
 
     /// @brief Copy constructor. Constructs a new Vec4 with the same values as the specified Vec4.
     /// @param[in] other The Vec4 to copy.
-    Vec4(const Vec4& other);
+    inline Vec4(const Vec4& other)
+        : x(other.x), y(other.y), z(other.z), w(other.w) {}
 
     /// @brief Constructs a Vec4 from a glm::vec4.
     /// @details Creates a Vec4 with components initialized from the given glm::vec4.
     /// @param[in] vec The glm::vec4 to convert from.
-    Vec4(const glm::vec4& other);
+    inline Vec4(const glm::vec4& other)
+        : x(other.x), y(other.y), z(other.z), w(other.w) {}
 
 
 
@@ -123,7 +126,10 @@ public:
 
     /// @brief Converts the Vec4 to a glm::vec4.
     /// @returns A glm::vec4 with the same components as this Vec4.
-    operator glm::vec4() const;
+    inline operator glm::vec4() const
+    {
+        return glm::vec4(x, y, z, w);
+    }
 
     /// @brief Creates a point in homogeneous coordinates (w=1).
     /// @details This static factory method creates a Vec4 representing a point in 3D space
@@ -132,7 +138,7 @@ public:
     /// @param y The y-coordinate of the point.
     /// @param z The z-coordinate of the point.
     /// @returns A Vec4 representing a point with the given coordinates and w=1.0f.
-    static inline Vec4 CreatePoint(const float x, const float y, const float z)
+    inline static Vec4 CreatePoint(const float x, const float y, const float z)
     {
         return Vec4(x, y, z, 1.0f);
     }
@@ -151,7 +157,7 @@ public:
     /// @param y The y-component of the vector.
     /// @param z The z-component of the vector.
     /// @returns A Vec4 representing a direction vector with the given components and w=0.0f.
-    static inline Vec4 CreateVector(const float x, const float y, const float z)
+    inline static Vec4 CreateVector(const float x, const float y, const float z)
     {
         return Vec4(x, y, z, 0.0f);
     }
@@ -166,45 +172,102 @@ public:
     /// @brief Assigns the values of another Vec4 object to this Vec4 object.
     /// @param[in] other The other Vec4 object whose values will be assigned to this Vec4 object.
     /// @return A reference to this Vec4 object, after the assignment.
-    Vec4& operator=(const Vec4 other);
+    inline Vec4& operator=(const Vec4 other)
+    {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        w = other.w;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Checks if this Vec4 is equal to the specified Vec4.
     /// @param[in] other The Vec4 to compare with.
     /// @return True if the Vec4s are equal, false otherwise.
-    bool operator==(const Vec4 other) const;
+    inline bool operator==(const Vec4 other) const
+    {
+        return x == other.x &&
+            y == other.y &&
+            z == other.z &&
+            w == other.w;
+    }
 
     /// @brief Checks if this Vec4 is not equal to the specified Vec4.
     /// @param[in] other The Vec4 to compare with.
     /// @return True if the Vec4s are not equal, false otherwise.
-    bool operator!=(const Vec4 other) const;
+    inline bool operator!=(const Vec4 other) const
+    {
+        return x != other.x ||
+            y != other.y ||
+            z != other.z ||
+            w != other.w;
+    }
 
     /// @brief Negates this Vec4.
     /// @return A new Vec4 that is the negation of this Vec4.
-    Vec4 operator-() const;
+    inline Vec4 operator-() const
+    {
+        return Vec4(-x, -y, -z, -w);
+    }
 
     /// @brief Overloads the addition assignment operator to add another Vec4 to this Vec4 and assign the result to this Vec4.
     /// @details This method adds the corresponding components of the other Vec4 to this Vec4 and assigns the result to this Vec4.
     /// @param[in] other The other Vec4 to add to this Vec4.
     /// @returns A reference to this Vec4 after the addition
-    Vec4& operator+=(const Vec4 other);
+    inline Vec4& operator+=(const Vec4 other)
+    {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        w += other.w;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Overloads the subtraction assignment operator to subtract another Vec4 from this Vec4 and assign the result to this Vec4.
     /// @details This method subtracts the corresponding components of the other Vec4 from this Vec4 and assigns the result to this Vec4.
     /// @param[in] other The other Vec4 to subtract from this Vec4.
     /// @returns A reference to this Vec4 after the subtraction.
-    Vec4& operator-=(const Vec4 other);
+    inline Vec4& operator-=(const Vec4 other)
+    {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        w -= other.w;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Overloads the multiplication assignment operator to multiply this Vec4 by a scalar and assign the result to this Vec4.
     /// @details This method multiplies the components of this Vec4 by the specified scalar value and assigns the result to this Vec4.
     /// @param[in] scalar The scalar value to multiply this Vec4 by.
     /// @returns A reference to this Vec4 after the multiplication.
-    Vec4& operator*=(const float scalar);
+    inline Vec4& operator*=(const float scalar)
+    {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        w *= scalar;
+        return *this; // Return ref to allow chaining assignment operations
+    }
 
     /// @brief Overloads the division assignment operator to divide this Vec4 by a scalar and assign the result to this Vec4.
     /// @details This method divides the components of this Vec4 by the specified scalar value and assigns the result to this Vec4.
     /// @param[in] scalar The scalar value to divide this Vec4 by.
     /// @returns A reference to this Vec4 after the division.
-    Vec4& operator/=(const float scalar);
+    inline Vec4& operator/=(const float scalar)
+    {
+        x /= scalar;
+        y /= scalar;
+        z /= scalar;
+        w /= scalar;
+        return *this; // Return ref to allow chaining assignment operations
+    }
+
+    inline float& operator[](int index) {
+        if (index >= 0 && index < 4) {
+            return (&x)[index]; // Access array of 4 floats starting at address of x
+        }
+        throw std::out_of_range("Vec4 index out of range");
+    }
 
     /// @brief Projects the homogeneous coordinates to 3D Cartesian coordinates.
     /// @details Performs homogeneous division, dividing x, y, and z by w.
@@ -225,35 +288,59 @@ public:
 
     /// @brief Computes the L0 norm of this Vec4, which is the count of non-zero components.
     /// @returns The L0 norm.
-    unsigned int L0Norm() const;
+    inline unsigned int L0Norm() const
+    {
+        return (x != 0 ? 1 : 0) + (y != 0 ? 1 : 0) + (z != 0 ? 1 : 0) + (w != 0 ? 1 : 0);
+    }
 
     /// @brief Computes the L0 norm considering only the xyz components (for homogeneous coordinates).
     /// @returns The L0 norm of the spatial (xyz) components only.
-    unsigned int L0NormSpatial() const;
+    inline unsigned int L0NormSpatial() const
+    {
+        return (x != 0 ? 1 : 0) + (y != 0 ? 1 : 0) + (z != 0 ? 1 : 0);
+    }
 
     /// @brief Computes the L1 norm of this Vec4, which is the sum of the absolute values of the components.
     /// @returns The L1 norm.
-    float L1Norm() const;
+    inline float L1Norm() const
+    {
+        return std::abs(x) + std::abs(y) + std::abs(z) + std::abs(w);
+    }
 
     /// @brief Computes the L1 norm considering only the xyz components (for homogeneous coordinates).
     /// @returns The sum of absolute values of the spatial (xyz) components only.
-    float L1NormSpatial() const;
+    inline float L1NormSpatial() const
+    {
+        return std::abs(x) + std::abs(y) + std::abs(z);
+    }
 
     /// @brief Computes the L2 norm (magnitude) of this Vec4.
     /// @returns The L2 norm.
-    float L2Norm() const;
+    inline float L2Norm() const
+    {
+        return std::sqrt(x*x + y*y + z*z + w*w);
+    }
 
     /// @brief Computes the L2 norm considering only the xyz components (for homogeneous coordinates).
     /// @returns The square root of the sum of squares of the spatial (xyz) components only.
-    float L2NormSpatial() const;
+    inline float L2NormSpatial() const
+    {
+        return std::sqrt(x*x + y*y + z*z);
+    }
 
     /// @brief Computes the L∞ norm (maximum absolute value) of this Vec4.
     /// @returns The maximum absolute value among all components.
-    float LInfNorm() const;
+    inline float LInfNorm() const
+    {
+        return std::max(std::max(std::max(std::abs(x), std::abs(y)), std::abs(z)), std::abs(w));
+    }
 
     /// @brief Computes the L∞ norm considering only the xyz components (for homogeneous coordinates).
     /// @returns The maximum absolute value among the spatial (xyz) components only.
-    float LInfNormSpatial() const;
+    inline float LInfNormSpatial() const
+    {
+        return std::max(std::max(std::abs(x), std::abs(y)), std::abs(z));
+    }
 
     /// @brief Alias for L2Norm, computes the L2 norm (magnitude) of this Vec4.
     /// @returns The L2 norm.
@@ -271,28 +358,43 @@ public:
     /// @brief Projects the vector onto the i basis vector (x-axis).
     /// @returns The projection of the vector onto the i basis vector,
     /// resulting in a vector along the x-axis with the same x component as the original vector.
-    Vec4 ProjOntoI() const;
+    inline Vec4 ProjOntoI() const
+    {
+        return Vec4(x, 0.0f, 0.0f, 0.0f);
+    }
 
     /// @brief Projects the vector onto the j basis vector (y-axis).
     /// @returns The projection of the vector onto the j basis vector,
     /// resulting in a vector along the y-axis with the same y component as the original vector.
-    Vec4 ProjOntoJ() const;
+    inline Vec4 ProjOntoJ() const
+    {
+        return Vec4(0.0f, y, 0.0f, 0.0f);
+    }
 
     /// @brief Projects the vector onto the k basis vector (z-axis).
     /// @returns The projection of the vector onto the k basis vector,
     /// resulting in a vector along the z-axis with the same z component as the original vector.
-    Vec4 ProjOntoK() const;
+    inline Vec4 ProjOntoK() const
+    {
+        return Vec4(0.0f, 0.0f, z, 0.0f);
+    }
 
     /// @brief Projects the vector onto the w basis vector (w-axis).
     /// @returns The projection of the vector onto the w basis vector,
     /// resulting in a vector along the w-axis with the same w component as the original vector.
-    Vec4 ProjOntoW() const;
+    inline Vec4 ProjOntoW() const
+    {
+        return Vec4(0.0f, 0.0f, 0.0f, w);
+    }
 
     /// @brief Computes the dot product of two Vec4 objects.
     /// @param a The first Vec4 object.
     /// @param b The second Vec4 object.
     /// @returns The dot product of a and b.
-    static float Dot(const Vec4 a, const Vec4 b);
+    inline static float Dot(const Vec4 a, const Vec4 b)
+    {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
 
     /// @brief Computes the 3D cross product of the spatial (xyz) components of two Vec4 objects.
     /// @details This performs the traditional 3D cross product on the xyz components and sets w=0.
@@ -307,7 +409,10 @@ public:
     /// @param a The first Vec4 object.
     /// @param b The second Vec4 object.
     /// @returns The Hadamard product of a and b.
-    static Vec4 Hadamard(const Vec4 a, const Vec4 b);
+    inline static Vec4 Hadamard(const Vec4 a, const Vec4 b)
+    {
+        return Vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+    }
 
     /// @brief Alias for Hadamard, computes the element-wise multiplication of two Vec4s.
     /// @param a The first Vec4.
@@ -327,7 +432,16 @@ public:
     /// @param b The second Vec4.
     /// @param t The interpolation factor. A value of 0 returns a, and a value of 1 returns b.
     /// @returns The interpolated Vec4.
-    static Vec4 Lerp(const Vec4 a, const Vec4 b, float t);
+    inline static Vec4 Lerp(const Vec4 a, const Vec4 b, float t)
+    {
+        return Vec4
+        (
+            a.x + t * (b.x - a.x),
+            a.y + t * (b.y - a.y),
+            a.z + t * (b.z - a.z),
+            a.w + t * (b.w - a.w)
+        );
+    }
 
     /// @brief Computes a linear interpolation between two points in homogeneous space.
     /// @details This performs a standard linear interpolation but ensures the result has w=1.

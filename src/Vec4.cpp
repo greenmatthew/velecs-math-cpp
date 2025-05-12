@@ -39,17 +39,6 @@ const Vec4 Vec4::W            {  0.0f,  0.0f,  0.0f,  1.0f };
 
 // Constructors and Destructors
 
-Vec4::Vec4(const float x, const float y, const float z, const float w)
-    : x(x), y(y), z(z), w(w) {}
-
-Vec4::Vec4(const Vec4& other)
-    : x(other.x), y(other.y), z(other.z), w(other.w) {}
-
-Vec4::Vec4(const glm::vec4& other)
-    : x(other.x), y(other.y), z(other.z), w(other.w) {}
-
-
-
 Vec4::Vec4(const Vec2 vec2, const float z, const float w)
     : x(vec2.x), y(vec2.y), z(z), w(w) {}
 
@@ -69,11 +58,6 @@ Vec4::Vec4(const float x, const Vec3 vec3)
 
 // Public Methods
 
-Vec4::operator glm::vec4() const
-{
-    return glm::vec4(x, y, z, w);
-}
-
 Vec4 Vec4::CreatePoint(const Vec3 vec)
 {
     return Vec4(vec, 1.0f);
@@ -82,73 +66,6 @@ Vec4 Vec4::CreatePoint(const Vec3 vec)
 Vec4 Vec4::CreateVector(const Vec3 vec)
 {
     return Vec4(vec, 0.0f);
-}
-
-Vec4& Vec4::operator=(const Vec4 other)
-{
-    x = other.x;
-    y = other.y;
-    z = other.z;
-    w = other.w;
-
-    return *this; // Return ref to allow chaining assignment operations
-}
-
-bool Vec4::operator==(const Vec4 other) const
-{
-    return x == other.x &&
-        y == other.y &&
-        z == other.z &&
-        w == other.w;
-}
-
-bool Vec4::operator!=(const Vec4 other) const
-{
-    return x != other.x ||
-        y != other.y ||
-        z != other.z ||
-        w != other.w;
-}
-
-Vec4 Vec4::operator-() const
-{
-    return Vec4(-x, -y, -z, -w);
-}
-
-Vec4& Vec4::operator+=(const Vec4 other)
-{
-    x += other.x;
-    y += other.y;
-    z += other.z;
-    w += other.w;
-    return *this; // Return ref to allow chaining assignment operations
-}
-
-Vec4& Vec4::operator-=(const Vec4 other)
-{
-    x -= other.x;
-    y -= other.y;
-    z -= other.z;
-    w -= other.w;
-    return *this; // Return ref to allow chaining assignment operations
-}
-
-Vec4& Vec4::operator*=(const float scalar)
-{
-    x *= scalar;
-    y *= scalar;
-    z *= scalar;
-    w *= scalar;
-    return *this; // Return ref to allow chaining assignment operations
-}
-
-Vec4& Vec4::operator/=(const float scalar)
-{
-    x /= scalar;
-    y /= scalar;
-    z /= scalar;
-    w /= scalar;
-    return *this; // Return ref to allow chaining assignment operations
 }
 
 Vec3 Vec4::ToVec3() const
@@ -179,75 +96,10 @@ Vec4 Vec4::ToPoint() const
     }
 }
 
-unsigned int Vec4::L0Norm() const
-{
-    return (x != 0 ? 1 : 0) + (y != 0 ? 1 : 0) + (z != 0 ? 1 : 0) + (w != 0 ? 1 : 0);
-}
-
-unsigned int Vec4::L0NormSpatial() const
-{
-    return (x != 0 ? 1 : 0) + (y != 0 ? 1 : 0) + (z != 0 ? 1 : 0);
-}
-
-float Vec4::L1Norm() const
-{
-    return std::abs(x) + std::abs(y) + std::abs(z) + std::abs(w);
-}
-
-float Vec4::L1NormSpatial() const
-{
-    return std::abs(x) + std::abs(y) + std::abs(z);
-}
-
-float Vec4::L2Norm() const
-{
-    return std::sqrt(x*x + y*y + z*z + w*w);
-}
-
-float Vec4::L2NormSpatial() const
-{
-    return std::sqrt(x*x + y*y + z*z);
-}
-
-float Vec4::LInfNorm() const
-{
-    return std::max(std::max(std::max(std::abs(x), std::abs(y)), std::abs(z)), std::abs(w));
-}
-
-float Vec4::LInfNormSpatial() const
-{
-    return std::max(std::max(std::abs(x), std::abs(y)), std::abs(z));
-}
-
 Vec4 Vec4::Normalize() const
 {
     float magnitude = L2Norm();
     return (magnitude != 0) ? (*this)/magnitude : Vec4::ZERO;
-}
-
-Vec4 Vec4::ProjOntoI() const
-{
-    return Vec4(x, 0.0f, 0.0f, 0.0f);
-}
-
-Vec4 Vec4::ProjOntoJ() const
-{
-    return Vec4(0.0f, y, 0.0f, 0.0f);
-}
-
-Vec4 Vec4::ProjOntoK() const
-{
-    return Vec4(0.0f, 0.0f, z, 0.0f);
-}
-
-Vec4 Vec4::ProjOntoW() const
-{
-    return Vec4(0.0f, 0.0f, 0.0f, w);
-}
-
-float Vec4::Dot(const Vec4 a, const Vec4 b)
-{
-    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 Vec4 Vec4::Cross(const Vec4 a, const Vec4 b)
@@ -262,11 +114,6 @@ Vec4 Vec4::Cross(const Vec4 a, const Vec4 b)
     );
 }
 
-Vec4 Vec4::Hadamard(const Vec4 a, const Vec4 b)
-{
-    return Vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
-}
-
 Vec4 Vec4::Clamp(const Vec4 vec, const Vec4 min, const Vec4 max)
 {
     return Vec4
@@ -275,17 +122,6 @@ Vec4 Vec4::Clamp(const Vec4 vec, const Vec4 min, const Vec4 max)
         std::clamp(vec.y, min.y, max.y),
         std::clamp(vec.z, min.z, max.z),
         std::clamp(vec.w, min.w, max.w)
-    );
-}
-
-Vec4 Vec4::Lerp(const Vec4 a, const Vec4 b, float t)
-{
-    return Vec4
-    (
-        a.x + t * (b.x - a.x),
-        a.y + t * (b.y - a.y),
-        a.z + t * (b.z - a.z),
-        a.w + t * (b.w - a.w)
     );
 }
 
