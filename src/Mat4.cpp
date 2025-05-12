@@ -23,9 +23,6 @@ const Mat4 Mat4::NEG_IDENTITY = glm::mat4(-1.0f);
 
 // Constructors and Destructors
 
-Mat4::Mat4(const glm::mat4& mat)
-    : internal_mat(mat) {}
-
 Mat4::Mat4(float diagonal)
     : internal_mat(glm::mat4(diagonal)) {}
 
@@ -196,28 +193,19 @@ Mat4 Mat4::WithRotation(const Quat& rotation) const
     return *this * rotation.ToMatrix();
 }
 
-Vec4 Mat4::XBasis() const
+Mat4 Mat4::WithInverse() const
 {
-    auto column = internal_mat[0];
-    return Vec4{ column[0], column[1], column[2], column[3] };
+    return Mat4(glm::inverse(internal_mat));
 }
 
-Vec4 Mat4::YBasis() const
+Mat4 Mat4::WithTranspose() const
 {
-    auto column = internal_mat[1];
-    return Vec4{ column[0], column[1], column[2], column[3] };
+    return Mat4(glm::transpose(internal_mat));
 }
 
-Vec4 Mat4::ZBasis() const
+Mat4 Mat4::Hadamard(const Mat4& lhs, const Mat4& rhs)
 {
-    auto column = internal_mat[2];
-    return Vec4{ column[0], column[1], column[2], column[3] };
-}
-
-Vec4 Mat4::Translation() const
-{
-    auto column = internal_mat[3];
-    return Vec4{ column[0], column[1], column[2], column[3] };
+    return Mat4(glm::matrixCompMult(lhs.internal_mat, rhs.internal_mat));
 }
 
 // Protected Fields

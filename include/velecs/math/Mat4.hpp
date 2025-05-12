@@ -46,7 +46,8 @@ public:
 
     /// @brief Constructs a Mat4 from a glm::mat4.
     /// @param mat The glm::mat4 to initialize this Mat4 with.
-    Mat4(const glm::mat4& mat);
+    inline Mat4(const glm::mat4& mat)
+        : internal_mat(mat) {}
 
     /// @brief Constructs a Mat4 with the specified value along the main diagonal.
     /// @param diagonal The value to place along the main diagonal of the matrix.
@@ -179,6 +180,25 @@ public:
     /// @return A reference to this matrix after applying the rotation.
     Mat4& Rotate(const Quat& quat);
 
+    /// @brief Inverses this matrix and returns a reference to the modified matrix.
+    /// @details Replaces this matrix with its inverse, allowing for method chaining.
+    ///          Useful for converting between coordinate spaces or creating view matrices.
+    /// @returns A reference to this matrix after computing its inverse.
+    /// @note This operation may fail if the matrix is singular (determinant is zero).
+    inline Mat4& Mat4::Inverse()
+    {
+        return *this = WithInverse();
+    }
+
+    /// @brief Transposes this matrix and returns a reference to the modified matrix.
+    /// @details Swaps rows and columns of this matrix in-place, allowing for method chaining.
+    ///          Used in certain graphics operations such as normal transformation.
+    /// @returns A reference to this matrix after computing its transpose.
+    inline Mat4& Mat4::Transpose()
+    {
+        return *this = WithTranspose();
+    }
+
     /// @brief Creates a new matrix by applying a translation to this matrix.
     /// @details Returns a new matrix without modifying the original.
     /// @param displacement The vector representing how far to move in each direction.
@@ -231,39 +251,61 @@ public:
     /// @return A new matrix representing this matrix with the rotation applied.
     Mat4 WithRotation(const Quat& rotation) const;
 
+    /// @brief Creates a new matrix that is the inverse of this matrix.
+    /// @details Returns a new matrix without modifying the original.
+    ///          The inverse of a matrix M is another matrix M' such that M * M' = M' * M = Identity.
+    /// @returns A new matrix representing the inverse of this matrix.
+    /// @throws May throw an exception if the matrix is singular (determinant is zero).
+    Mat4 WithInverse() const;
+
+    /// @brief Creates a new matrix that is the transpose of this matrix.
+    /// @details Returns a new matrix without modifying the original.
+    ///          The transpose of a matrix swaps its rows and columns.
+    /// @returns A new matrix representing the transpose of this matrix.
+    Mat4 WithTranspose() const;
+
     /// @brief Performs component-wise multiplication of two matrices.
     /// @details Multiplies each component of lhs with the corresponding component of rhs.
     /// @param lhs The first matrix.
     /// @param rhs The second matrix.
     /// @returns A new matrix with each component being the product of the corresponding components.
-    static inline Mat4 Hadamard(const Mat4& lhs, const Mat4& rhs)
-    {
-        return Mat4(glm::matrixCompMult(lhs.internal_mat, rhs.internal_mat));
-    }
+    static Mat4 Hadamard(const Mat4& lhs, const Mat4& rhs);
 
     /// @brief Gets the X basis vector (first column) of the matrix.
     /// @details Returns the x-axis basis vector which represents the 
     ///          right direction in the matrix's transformation.
     /// @returns A Vec4 containing the first column of the matrix.
-    Vec4 XBasis() const;
+    inline Vec4 XBasis() const
+    {
+        return Vec4{ internal_mat[0][0], internal_mat[0][1], internal_mat[0][2], internal_mat[0][3] };
+    }
 
     /// @brief Gets the Y basis vector (second column) of the matrix.
     /// @details Returns the y-axis basis vector which represents the 
     ///          up direction in the matrix's transformation.
     /// @returns A Vec4 containing the second column of the matrix.
-    Vec4 YBasis() const;
+    inline Vec4 YBasis() const
+    {
+        return Vec4{ internal_mat[1][0], internal_mat[1][1], internal_mat[1][2], internal_mat[1][3] };
+    }
 
     /// @brief Gets the Z basis vector (third column) of the matrix.
     /// @details Returns the z-axis basis vector which represents the 
     ///          forward direction in the matrix's transformation.
     /// @returns A Vec4 containing the third column of the matrix.
-    Vec4 ZBasis() const;
+    inline Vec4 ZBasis() const
+    {
+        return Vec4{ internal_mat[2][0], internal_mat[2][1], internal_mat[2][2], internal_mat[2][3] };
+    }
 
     /// @brief Gets the translation vector (fourth column) of the matrix.
     /// @details Returns the translation component of the transformation matrix,
     ///          representing the position in world space.
     /// @returns A Vec4 containing the fourth column of the matrix.
-    Vec4 Translation() const;
+    inline Vec4 Translation() const
+    {
+        return Vec4{ internal_mat[3][0], internal_mat[3][1], internal_mat[3][2], internal_mat[3][3] };
+    }
 
     /// @brief Alias for Translation(). Gets the position vector from the matrix.
     /// @returns A Vec4 containing the translation/position component.
