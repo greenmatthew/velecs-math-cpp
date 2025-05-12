@@ -193,7 +193,7 @@ public:
     /// @returns The L1 norm.
     inline float L1Norm() const
     {
-        return abs(x) + abs(y);
+        return std::abs(x) + std::abs(y);
     }
 
     /// @brief Computes the L2 norm (magnitude) of this Vec2.
@@ -221,7 +221,7 @@ public:
 
     /// @brief Normalizes this Vec2, making its magnitude equal to 1.
     /// @returns The normalized Vec2.
-    inline Vec2 Normalize() const;
+    Vec2 Normalize() const;
 
     /// @brief Projects the vector onto the i basis vector (x-axis).
     /// @returns The projection of the vector onto the i basis vector.
