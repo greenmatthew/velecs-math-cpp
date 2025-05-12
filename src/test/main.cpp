@@ -63,9 +63,9 @@ int main()
     Mat4 triModelMat = triScaleMat * triRotMat * triPosMat;
     std::cout << "triangle Model Matrix:\n" << triModelMat << std::endl;
 
-    // std::cout << "triangle vertex 1 world space coord:\n" << triModelMat * triV1 << std::endl;
-    // std::cout << "triangle vertex 2 world space coord:\n" << triModelMat * triV2 << std::endl;
-    // std::cout << "triangle vertex 3 world space coord:\n" << triModelMat * triV3 << std::endl;
+    std::cout << "triangle vertex 1:\n" << triV1.ToVec3() << " -> " << (triModelMat * triV1).ToVec3() << std::endl;
+    std::cout << "triangle vertex 2:\n" << triV2.ToVec3() << " -> " << (triModelMat * triV2).ToVec3() << std::endl;
+    std::cout << "triangle vertex 3:\n" << triV3.ToVec3() << " -> " << (triModelMat * triV3).ToVec3() << std::endl;
 
     return EXIT_SUCCESS;
 }

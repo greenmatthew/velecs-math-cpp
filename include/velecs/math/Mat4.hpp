@@ -306,4 +306,14 @@ inline Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
     return Mat4(lhs.internal_mat * rhs.internal_mat);
 }
 
+/// @brief Overloads the multiplication operator to multiply a matrix by a vector.
+/// @details Performs standard matrix-vector multiplication.
+/// @param[in] lhs The matrix operand.
+/// @param[in] rhs The vector operand.
+/// @returns A new vector representing the transformation of the vector by the matrix.
+inline Vec4 operator*(const Mat4& lhs, const Vec4& rhs)
+{
+    return Vec4(lhs.internal_mat * static_cast<glm::vec4>(rhs));
+}
+
 } // namespace velecs::math
