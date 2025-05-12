@@ -42,6 +42,9 @@ Vec3::Vec3(const float x, const float y, const float z)
 Vec3::Vec3(const Vec3 &other)
     : x(other.x), y(other.y), z(other.z) {}
 
+Vec3::Vec3(const glm::vec3 &other)
+: x(other.x), y(other.y), z(other.z) {}
+
 Vec3::Vec3(const Vec2 vec2, const float z)
     : x(vec2.x), y(vec2.y), z(z) {}
 

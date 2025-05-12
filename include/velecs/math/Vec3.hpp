@@ -65,6 +65,12 @@ public:
     /// @param[in] other The Vec3 to copy.
     Vec3(const Vec3 &other);
 
+    /// @brief Constructs a Vec3 from a glm::vec3.
+    /// @details Creates a new Vec3 object with components initialized from the given glm::vec3.
+    ///          This allows for easy conversion from GLM's vector type to the velecs math library.
+    /// @param[in] other The glm::vec3 to copy components from.
+    Vec3(const glm::vec3 &other);
+
     /// @brief Constructs a Vec3 from a Vec2 and an optional z-component.
     /// @details The x and y components are initialized from the Vec2, while the z-component 
     ///          is set to the specified value (defaulting to 0.0f).
