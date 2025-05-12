@@ -9,7 +9,9 @@
 /// Proprietary and confidential
 
 #include "velecs/math/Mat4.hpp"
+#include "velecs/math/Vec3.hpp"
 #include "velecs/math/Vec4.hpp"
+#include "velecs/math/Quat.hpp"
 
 namespace velecs::math {
 
@@ -29,52 +31,35 @@ Mat4::Mat4(float diagonal)
 
 // Public Methods
 
-Mat4& Mat4::operator*=(const Mat4& other)
+Mat4 Mat4::FromPosition(const Vec3& position)
 {
-    internal_mat = internal_mat * other.internal_mat;
-    return *this; // Return ref to allow chaining assignment operations
+    glm::mat4 internal = glm::mat4(1.0f);
+    internal[3][0] = position.x;
+    internal[3][1] = position.y;
+    internal[3][2] = position.z;
+    return Mat4(internal);
 }
 
-Mat4 Mat4::Translated(const Vec3& translation) const
+Mat4 Mat4::FromScale(const Vec3& scale)
 {
-    return glm::translate(internal_mat, static_cast<glm::vec3>(translation));
+    glm::mat4 internal = glm::mat4(1.0f);
+    internal[0][0] = scale.x;
+    internal[1][1] = scale.y;
+    internal[2][2] = scale.z;
+    return Mat4(internal);
 }
 
-Mat4 Mat4::Scaled(const Vec3& scale) const
+Mat4 Mat4::FromRotation(const Vec3& rotation)
 {
-    return glm::scale(internal_mat, static_cast<glm::vec3>(scale));
+    return Quat::FromEulerAngles(rotation).ToMatrix();
 }
 
-Mat4 Mat4::Rotated(const float rad, const Vec3& axis) const
+Mat4 Mat4::FromRotationDeg(const Vec3& rotationDeg)
 {
-    return glm::rotate(internal_mat, rad, static_cast<glm::vec3>(axis));
+    return Quat::FromEulerAnglesDeg(rotationDeg).ToMatrix();
 }
 
-Vec4 Mat4::XBasis() const
-{
-    auto column = internal_mat[0];
-    return Vec4{ column[0], column[1], column[2], column[3] };
-}
-
-Vec4 Mat4::YBasis() const
-{
-    auto column = internal_mat[1];
-    return Vec4{ column[0], column[1], column[2], column[3] };
-}
-
-Vec4 Mat4::ZBasis() const
-{
-    auto column = internal_mat[2];
-    return Vec4{ column[0], column[1], column[2], column[3] };
-}
-
-Vec4 Mat4::Translation() const
-{
-    auto column = internal_mat[3];
-    return Vec4{ column[0], column[1], column[2], column[3] };
-}
-
-static Mat4 CreatePerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane)
+Mat4 Mat4::FromPerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane)
 {
     // Define the coordinate system change matrix (X)
     glm::mat4 X = glm::mat4(1.0f); // Start with an identity matrix
@@ -102,7 +87,7 @@ static Mat4 CreatePerspective(float verticalFov, float aspectRatio, float nearPl
     return Mat4(perspectiveMatrix * X);
 }
 
-static Mat4 CreateOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane)
+Mat4 Mat4::FromOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane)
 {
     // Define the coordinate system change matrix (X)
     glm::mat4 X = glm::mat4(1.0f);
@@ -131,6 +116,108 @@ static Mat4 CreateOrthographic(float left, float right, float bottom, float top,
 
     // Apply the coordinate system change
     return Mat4(orthoMatrix * X);
+}
+
+Mat4& Mat4::operator*=(const Mat4& other)
+{
+    internal_mat = internal_mat * other.internal_mat;
+    return *this; // Return ref to allow chaining assignment operations
+}
+
+Mat4& Mat4::Translate(const Vec3& displacement)
+{
+    *this = WithTranslation(displacement);
+    return *this;
+}
+
+Mat4& Mat4::Scale(const Vec3& scale)
+{
+    *this = WithScale(scale);
+    return *this;
+}
+
+Mat4& Mat4::Rotate(const float angle, const Vec3& axis)
+{
+    *this = WithRotation(angle, axis);
+    return *this;
+}
+
+Mat4& Mat4::RotateDeg(const float angleDeg, const Vec3& axis)
+{
+    *this = WithRotationDeg(angleDeg, axis);
+    return *this;
+}
+
+Mat4& Mat4::Rotate(const Vec3& eulerAngles)
+{
+    *this = WithRotation(eulerAngles);
+    return *this;
+}
+
+Mat4& Mat4::RotateDeg(const Vec3& eulerAnglesDeg)
+{
+    *this = WithRotationDeg(eulerAnglesDeg);
+    return *this;
+}
+
+Mat4& Mat4::Rotate(const Quat& quat)
+{
+    *this = WithRotation(quat);
+    return *this;
+}
+
+Mat4 Mat4::WithTranslation(const Vec3& displacement) const
+{
+    return glm::translate(internal_mat, static_cast<glm::vec3>(displacement));
+}
+
+Mat4 Mat4::WithScale(const Vec3& scale) const
+{
+    return glm::scale(internal_mat, static_cast<glm::vec3>(scale));
+}
+
+Mat4 Mat4::WithRotation(const float angle, const Vec3& axis) const
+{
+    return glm::rotate(internal_mat, angle, static_cast<glm::vec3>(axis));
+}
+
+Mat4 Mat4::WithRotation(const Vec3& eulerAngles) const
+{
+    return *this * Quat::FromEulerAngles(eulerAngles).ToMatrix();
+}
+
+Mat4 Mat4::WithRotationDeg(const Vec3& eulerAnglesDeg) const
+{
+    return *this * Quat::FromEulerAnglesDeg(eulerAnglesDeg).ToMatrix();
+}
+
+Mat4 Mat4::WithRotation(const Quat& rotation) const
+{
+    return *this * rotation.ToMatrix();
+}
+
+Vec4 Mat4::XBasis() const
+{
+    auto column = internal_mat[0];
+    return Vec4{ column[0], column[1], column[2], column[3] };
+}
+
+Vec4 Mat4::YBasis() const
+{
+    auto column = internal_mat[1];
+    return Vec4{ column[0], column[1], column[2], column[3] };
+}
+
+Vec4 Mat4::ZBasis() const
+{
+    auto column = internal_mat[2];
+    return Vec4{ column[0], column[1], column[2], column[3] };
+}
+
+Vec4 Mat4::Translation() const
+{
+    auto column = internal_mat[3];
+    return Vec4{ column[0], column[1], column[2], column[3] };
 }
 
 // Protected Fields

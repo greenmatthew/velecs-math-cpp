@@ -10,6 +10,9 @@
 
 #pragma once
 
+#include "velecs/math/Mat4.hpp"
+
+#include "glm/gtc/quaternion.hpp"
 #include "glm/ext/quaternion_float.hpp"
 
 namespace velecs::math {
@@ -84,6 +87,14 @@ public:
     /// @brief Convert this quaternion to Euler angles in degrees
     /// @return A Vec3 containing the Euler angles in degrees (x, y, z)
     Vec3 ToEulerAnglesDeg() const;
+
+    /// @brief Converts the quaternion to a rotation matrix
+    /// @return A Mat4 representing the rotation described by this quaternion
+    inline Mat4 ToMatrix() const
+    {
+        // Use GLM's built-in conversion from quaternion to mat4
+        return Mat4(glm::mat4_cast(internal_quat));
+    }
 
 protected:
     // Protected Fields

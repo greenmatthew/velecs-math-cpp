@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include "velecs/math/Vec3.hpp"
+#include "velecs/math/Consts.hpp"
+#include "velecs/math/Vec4.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -20,7 +21,8 @@
 
 namespace velecs::math {
 
-struct Vec4;
+struct Vec3;
+struct Quat;
 
 /// @struct Mat4
 /// @brief A wrapper struct for glm::mat4 to provide consistent interfaces with other math classes.
@@ -55,11 +57,179 @@ public:
 
     // Public Methods
 
+    /// @brief Creates a transformation matrix from a position vector.
+    /// @details Efficiently constructs a translation matrix by directly setting the
+    ///          position components in the last column of the identity matrix.
+    /// @param position The position vector to use for translation.
+    /// @return A transformation matrix representing translation to the specified position.
+    static Mat4 FromPosition(const Vec3& position);
+
+    /// @brief Creates a transformation matrix from scale factors.
+    /// @details Efficiently constructs a scaling matrix by directly setting the
+    ///          scale components along the main diagonal of the identity matrix.
+    /// @param scale The scale factors for the x, y, and z axes.
+    /// @return A transformation matrix representing scaling by the specified factors.
+    static Mat4 FromScale(const Vec3& scale);
+
+    /// @brief Creates a rotation matrix from Euler angles in radians.
+    /// @details Converts the Euler angles to a quaternion and then to a rotation matrix.
+    ///          Uses the order X-Y-Z for applying rotations (pitch, yaw, roll).
+    /// @param rotation The rotation vector in radians (x=pitch, y=yaw, z=roll).
+    /// @return A transformation matrix representing the specified rotation.
+    static Mat4 FromRotation(const Vec3& rotation);
+
+    /// @brief Creates a rotation matrix from Euler angles in degrees.
+    /// @details Converts the Euler angles to a quaternion and then to a rotation matrix.
+    ///          Uses the order X-Y-Z for applying rotations (pitch, yaw, roll).
+    ///          This is a convenience function that first converts degrees to radians.
+    /// @param rotationDeg The rotation vector in degrees (x=pitch, y=yaw, z=roll).
+    /// @return A transformation matrix representing the specified rotation.
+    static Mat4 FromRotationDeg(const Vec3& rotationDeg);
+
+        /// @brief Creates a perspective projection matrix suitable for Vulkan rendering
+    /// @details This method builds a perspective projection matrix that accounts for Vulkan's coordinate
+    ///          system conventions, with Y pointing down and Z in [0,1] range. It applies the necessary
+    ///          coordinate system transformation to match Vulkan's expectations.
+    /// @param verticalFov The vertical field of view in degrees
+    /// @param aspectRatio The aspect ratio (width/height) of the viewport
+    /// @param nearPlane The distance to the near clipping plane (must be positive)
+    /// @param farPlane The distance to the far clipping plane (must be greater than near plane)
+    /// @return A perspective projection matrix compatible with Vulkan's coordinate system
+    static Mat4 FromPerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane);
+
+    /// @brief Creates an orthographic projection matrix suitable for Vulkan rendering
+    /// @details This method builds an orthographic projection matrix that maps the specified view volume
+    ///          to Vulkan's normalized device coordinates, accounting for Vulkan's coordinate system
+    ///          with Y pointing down and Z in [0,1] range.
+    /// @param left The left coordinate of the view volume
+    /// @param right The right coordinate of the view volume
+    /// @param bottom The bottom coordinate of the view volume
+    /// @param top The top coordinate of the view volume
+    /// @param nearPlane The near clipping plane distance
+    /// @param farPlane The far clipping plane distance
+    /// @return An orthographic projection matrix compatible with Vulkan's coordinate system
+    static Mat4 FromOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane);
+
+    /// @brief Creates a centered orthographic projection matrix suitable for Vulkan rendering
+    /// @details Convenience method that creates an orthographic projection with a symmetric view volume
+    ///          centered around the origin, specified by width and height.
+    /// @param width The total width of the view volume
+    /// @param height The total height of the view volume
+    /// @param nearPlane The near clipping plane distance
+    /// @param farPlane The far clipping plane distance
+    /// @return A centered orthographic projection matrix compatible with Vulkan's coordinate system
+    static inline Mat4 FromOrthographic(float width, float height, float nearPlane, float farPlane)
+    {
+        return FromOrthographic(-width/2, width/2, -height/2, height/2, nearPlane, farPlane);
+    }
+
     /// @brief Overloads the multiplication assignment operator to multiply this matrix by another matrix.
     /// @details This method performs standard matrix multiplication and assigns the result to this matrix.
     /// @param[in] other The matrix to multiply with this matrix.
     /// @returns A reference to this matrix after the multiplication.
     Mat4& operator*=(const Mat4& other);
+
+    /// @brief Modifies this matrix by applying a translation and returns a reference to this matrix.
+    /// @details Applies the displacement to this matrix, allowing for method chaining.
+    /// @param displacement The vector representing how far to move in each direction.
+    /// @return A reference to this matrix after applying the translation.
+    Mat4& Translate(const Vec3& displacement);
+
+    /// @brief Modifies this matrix by applying scaling and returns a reference to this matrix.
+    /// @details Applies the scale factors to this matrix, allowing for method chaining.
+    /// @param scale The scale factors for x, y, and z axes.
+    /// @return A reference to this matrix after applying the scaling.
+    Mat4& Scale(const Vec3& scale);
+
+    /// @brief Modifies this matrix by applying rotation around an axis and returns a reference to this matrix.
+    /// @details Rotates this matrix around the specified axis by the given angle in radians, 
+    ///          allowing for method chaining.
+    /// @param angle The rotation angle in radians.
+    /// @param axis The axis to rotate around (should be normalized).
+    /// @return A reference to this matrix after applying the rotation.
+    Mat4& Rotate(const float angle, const Vec3& axis);
+
+    /// @brief Modifies this matrix by applying rotation around an axis and returns a reference to this matrix.
+    /// @details Rotates this matrix around the specified axis by the given angle in degrees, 
+    ///          allowing for method chaining. Internally converts degrees to radians.
+    /// @param angleDeg The rotation angle in degrees.
+    /// @param axis The axis to rotate around (should be normalized).
+    /// @return A reference to this matrix after applying the rotation.
+    Mat4& RotateDeg(const float angleDeg, const Vec3& axis);
+
+    /// @brief Modifies this matrix by applying Euler angle rotation and returns a reference to this matrix.
+    /// @details Applies rotation based on Euler angles in radians (pitch, yaw, roll),
+    ///          allowing for method chaining. Uses quaternion conversion internally for better accuracy.
+    /// @param eulerAngles The Euler angles in radians (x=pitch, y=yaw, z=roll).
+    /// @return A reference to this matrix after applying the rotation.
+    Mat4& Rotate(const Vec3& eulerAngles);
+
+    /// @brief Modifies this matrix by applying Euler angle rotation and returns a reference to this matrix.
+    /// @details Applies rotation based on Euler angles in degrees (pitch, yaw, roll),
+    ///          allowing for method chaining. Internally converts degrees to radians and
+    ///          uses quaternion conversion for better accuracy.
+    /// @param eulerAnglesDeg The Euler angles in degrees (x=pitch, y=yaw, z=roll).
+    /// @return A reference to this matrix after applying the rotation.
+    Mat4& RotateDeg(const Vec3& eulerAnglesDeg);
+
+    /// @brief Modifies this matrix by applying quaternion rotation and returns a reference to this matrix.
+    /// @details Applies the rotation represented by the quaternion to this matrix,
+    ///          allowing for method chaining. Using quaternions helps avoid gimbal lock issues.
+    /// @param quat The quaternion representing the rotation to apply.
+    /// @return A reference to this matrix after applying the rotation.
+    Mat4& Rotate(const Quat& quat);
+
+    /// @brief Creates a new matrix by applying a translation to this matrix.
+    /// @details Returns a new matrix without modifying the original.
+    /// @param displacement The vector representing how far to move in each direction.
+    /// @return A new matrix representing this matrix with the translation applied.
+    Mat4 WithTranslation(const Vec3& displacement) const;
+
+    /// @brief Applies scaling to this matrix and returns a new matrix.
+    /// @details Creates a new matrix that represents the result of applying the scaling
+    ///          to this matrix. This operation does not modify the original matrix.
+    /// @param scale The scale factors for x, y, and z axes.
+    /// @return A new matrix representing this matrix with the scaling applied.
+    Mat4 WithScale(const Vec3& scale) const;
+
+    /// @brief Applies rotation to this matrix and returns a new matrix.
+    /// @details Creates a new matrix that represents the result of rotating this matrix
+    ///          around the specified axis by the given angle. This operation does not
+    ///          modify the original matrix.
+    /// @param angle The rotation angle in radians.
+    /// @param axis The axis to rotate around (should be normalized).
+    /// @return A new matrix representing this matrix with the rotation applied.
+    Mat4 WithRotation(const float angle, const Vec3& axis) const;
+
+    /// @brief Applies rotation in degrees to this matrix and returns a new matrix.
+    /// @details Convenience method that converts degrees to radians and applies rotation.
+    ///          This operation does not modify the original matrix.
+    /// @param angleDeg The rotation angle in degrees.
+    /// @param axis The axis to rotate around (should be normalized).
+    /// @return A new matrix representing this matrix with the rotation applied.
+    inline Mat4 WithRotationDeg(const float angleDeg, const Vec3& axis) const
+    {
+        return WithRotation(angleDeg * DEG_TO_RAD, axis);
+    }
+
+    /// @brief Creates a new matrix by applying Euler angle rotation to this matrix.
+    /// @details Returns a new matrix without modifying the original.
+    /// @param eulerAngles The Euler angles in radians (pitch, yaw, roll).
+    /// @return A new matrix representing this matrix with the rotation applied.
+    Mat4 WithRotation(const Vec3& eulerAngles) const;
+
+    /// @brief Creates a new matrix by applying Euler angle rotation in degrees to this matrix.
+    /// @details Returns a new matrix without modifying the original.
+    /// @param eulerAnglesDeg The Euler angles in degrees (pitch, yaw, roll).
+    /// @return A new matrix representing this matrix with the rotation applied.
+    Mat4 WithRotationDeg(const Vec3& eulerAnglesDeg) const;
+
+    /// @brief Applies quaternion rotation to this matrix and returns a new matrix.
+    /// @details Creates a new matrix that represents the result of applying the quaternion
+    ///          rotation to this matrix. This operation does not modify the original matrix.
+    /// @param rotation The quaternion representing the rotation to apply.
+    /// @return A new matrix representing this matrix with the rotation applied.
+    Mat4 WithRotation(const Quat& rotation) const;
 
     /// @brief Performs component-wise multiplication of two matrices.
     /// @details Multiplies each component of lhs with the corresponding component of rhs.
@@ -70,22 +240,6 @@ public:
     {
         return Mat4(glm::matrixCompMult(lhs.internal_mat, rhs.internal_mat));
     }
-
-    /// @brief Returns a new matrix with translation applied to this matrix.
-    /// @param translation The translation vector to apply.
-    /// @return A new matrix representing this matrix with the translation applied.
-    Mat4 Translated(const Vec3& translation) const;
-
-    /// @brief Returns a new matrix with scaling applied to this matrix.
-    /// @param scale The scale factors for x, y, and z axes.
-    /// @return A new matrix representing this matrix with the scaling applied.
-    Mat4 Scaled(const Vec3& scale) const;
-
-    /// @brief Returns a new matrix with rotation applied to this matrix.
-    /// @param rad The rotation angle in radians.
-    /// @param axis The axis to rotate around (should be normalized).
-    /// @return A new matrix representing this matrix with the rotation applied.
-    Mat4 Rotated(const float rad, const Vec3& axis) const;
 
     /// @brief Gets the X basis vector (first column) of the matrix.
     /// @details Returns the x-axis basis vector which represents the 
@@ -114,68 +268,6 @@ public:
     /// @brief Alias for Translation(). Gets the position vector from the matrix.
     /// @returns A Vec4 containing the translation/position component.
     inline Vec4 Position() const { return Translation(); }
-
-    /// @brief Creates a translation matrix from a Vec3.
-    /// @param translation The translation vector to use.
-    /// @return A new transformation matrix with the specified translation applied to an identity matrix.
-    static inline Mat4 CreateTranslation(const Vec3& translation)
-    {
-        return glm::translate(glm::mat4(1.0f), static_cast<glm::vec3>(translation));
-    }
-
-    /// @brief Creates a scaling matrix from a Vec3.
-    /// @param scale The scale factors for x, y, and z axes.
-    /// @return A new transformation matrix with the specified scaling applied to an identity matrix.
-    static inline Mat4 CreateScale(const Vec3& scale)
-    {
-        return glm::scale(glm::mat4(1.0f), static_cast<glm::vec3>(scale));
-    }
-
-    /// @brief Creates a rotation matrix around an arbitrary axis.
-    /// @param angle The rotation angle in radians.
-    /// @param axis The axis to rotate around (should be normalized).
-    /// @return A new transformation matrix with the specified rotation applied to an identity matrix.
-    static inline Mat4 CreateRotation(const float angle, const Vec3& axis)
-    {
-        return glm::rotate(glm::mat4(1.0f), angle, static_cast<glm::vec3>(axis));
-    }
-
-    /// @brief Creates a perspective projection matrix suitable for Vulkan rendering
-    /// @details This method builds a perspective projection matrix that accounts for Vulkan's coordinate
-    ///          system conventions, with Y pointing down and Z in [0,1] range. It applies the necessary
-    ///          coordinate system transformation to match Vulkan's expectations.
-    /// @param verticalFov The vertical field of view in degrees
-    /// @param aspectRatio The aspect ratio (width/height) of the viewport
-    /// @param nearPlane The distance to the near clipping plane (must be positive)
-    /// @param farPlane The distance to the far clipping plane (must be greater than near plane)
-    /// @return A perspective projection matrix compatible with Vulkan's coordinate system
-    static Mat4 CreatePerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane);
-
-    /// @brief Creates an orthographic projection matrix suitable for Vulkan rendering
-    /// @details This method builds an orthographic projection matrix that maps the specified view volume
-    ///          to Vulkan's normalized device coordinates, accounting for Vulkan's coordinate system
-    ///          with Y pointing down and Z in [0,1] range.
-    /// @param left The left coordinate of the view volume
-    /// @param right The right coordinate of the view volume
-    /// @param bottom The bottom coordinate of the view volume
-    /// @param top The top coordinate of the view volume
-    /// @param nearPlane The near clipping plane distance
-    /// @param farPlane The far clipping plane distance
-    /// @return An orthographic projection matrix compatible with Vulkan's coordinate system
-    static Mat4 CreateOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane);
-
-    /// @brief Creates a centered orthographic projection matrix suitable for Vulkan rendering
-    /// @details Convenience method that creates an orthographic projection with a symmetric view volume
-    ///          centered around the origin, specified by width and height.
-    /// @param width The total width of the view volume
-    /// @param height The total height of the view volume
-    /// @param nearPlane The near clipping plane distance
-    /// @param farPlane The far clipping plane distance
-    /// @return A centered orthographic projection matrix compatible with Vulkan's coordinate system
-    static inline Mat4 CreateOrthographic(float width, float height, float nearPlane, float farPlane)
-    {
-        return CreateOrthographic(-width/2, width/2, -height/2, height/2, nearPlane, farPlane);
-    }
 
     /// @brief Outputs a Mat4 object to an output stream in a formatted manner.
     /// @param[in] os The output stream to write to.
