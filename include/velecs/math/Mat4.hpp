@@ -119,7 +119,7 @@ public:
     /// @param nearPlane The near clipping plane distance
     /// @param farPlane The far clipping plane distance
     /// @return A centered orthographic projection matrix compatible with Vulkan's coordinate system
-    static inline Mat4 FromOrthographic(float width, float height, float nearPlane, float farPlane)
+    inline static Mat4 FromOrthographic(float width, float height, float nearPlane, float farPlane)
     {
         return FromOrthographic(-width/2, width/2, -height/2, height/2, nearPlane, farPlane);
     }
