@@ -3,6 +3,7 @@
 
 #include "velecs/math/Vec2.hpp"
 #include "velecs/math/Vec3.hpp"
+#include "velecs/math/Vec4.hpp"
 #include "velecs/math/Mat4.hpp"
 
 #include <glm/common.hpp>
@@ -45,6 +46,18 @@ int main()
     std::cout << "2.\n" << compTransforms << std::endl;
     compTransforms = compTransforms * T;
     std::cout << "3.\n" << compTransforms << std::endl;
+
+
+    Vec4 triV1 = Vec4::CreatePoint(-0.5, -0.5,  0.0);
+    Vec4 triV2 = Vec4::CreatePoint( 0.5, -0.5,  0.0);
+    Vec4 triV3 = Vec4::CreatePoint( 0.0,  0.5,  0.0);
+
+    Vec3 triPos = Vec3::FORWARD * 10;
+    Vec3 triRot = Vec3::ZERO;
+    Vec3 triScale = Vec3::ONE;
+    Mat4 triPosMat = Mat4::CreateTranslation(triPos);
+    // Mat4 triRotMat = Mat4::CreateRotation(triRot);
+    Mat4 triScaleMat = Mat4::CreateScale(triScale);
 
     return EXIT_SUCCESS;
 }
