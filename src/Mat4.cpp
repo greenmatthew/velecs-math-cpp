@@ -74,6 +74,65 @@ Vec4 Mat4::Translation() const
     return Vec4{ column[0], column[1], column[2], column[3] };
 }
 
+static Mat4 CreatePerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane)
+{
+    // Define the coordinate system change matrix (X)
+    glm::mat4 X = glm::mat4(1.0f); // Start with an identity matrix
+    X[1][1] = -1.0f; // Flip Y axis
+    X[2][2] = -1.0f; // Flip Z axis
+
+    const float vFovRads = DEG_TO_RAD * verticalFov;
+    const float focalLength = 1.0f / (std::tanf(vFovRads * 0.5f));
+    const float x = focalLength / aspectRatio;
+    const float y = focalLength;
+    const float A = farPlane / (farPlane - nearPlane);
+    const float B = -nearPlane * A;
+
+    // Define the right-handed perspective projection matrix manually
+    glm::mat4 perspectiveMatrix = glm::mat4(0.0f); // Initialize all elements to 0
+    perspectiveMatrix[0][0] = x;
+    perspectiveMatrix[1][1] = y; // Negative for Vulkan's Y-axis
+    perspectiveMatrix[2][2] = A;
+    perspectiveMatrix[2][3] = 1.0f; // For perspective projection
+    perspectiveMatrix[3][2] = B;
+
+    // Combine the projection matrix with the coordinate system change matrix
+    // This is because Vulkan switches coordinate systems between world space and NDC space.
+    // Pre-applying this change to the perspective matrix so it is not forgotten.
+    return Mat4(perspectiveMatrix * X);
+}
+
+static Mat4 CreateOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane)
+{
+    // Define the coordinate system change matrix (X)
+    glm::mat4 X = glm::mat4(1.0f);
+    X[1][1] = -1.0f; // Flip Y axis
+    X[2][2] = -1.0f; // Flip Z axis
+
+    // Calculate the scale factors
+    float scaleX = 2.0f / (right - left);
+    float scaleY = 2.0f / (top - bottom);
+    float scaleZ = 1.0f / (farPlane - nearPlane); // Scale to [0,1] for Vulkan
+
+    // Calculate the translation factors
+    float transX = -(right + left) / (right - left);
+    float transY = -(top + bottom) / (top - bottom);
+    float transZ = -nearPlane / (farPlane - nearPlane); // Offset for Vulkan's [0,1] Z range
+
+    // Create the orthographic projection matrix
+    glm::mat4 orthoMatrix = glm::mat4(0.0f);
+    orthoMatrix[0][0] = scaleX;
+    orthoMatrix[1][1] = scaleY;
+    orthoMatrix[2][2] = scaleZ;
+    orthoMatrix[3][0] = transX;
+    orthoMatrix[3][1] = transY;
+    orthoMatrix[3][2] = transZ;
+    orthoMatrix[3][3] = 1.0f;
+
+    // Apply the coordinate system change
+    return Mat4(orthoMatrix * X);
+}
+
 // Protected Fields
 
 // Protected Methods

@@ -132,12 +132,49 @@ public:
     }
 
     /// @brief Creates a rotation matrix around an arbitrary axis.
-    /// @param rad The rotation angle in radians.
+    /// @param angle The rotation angle in radians.
     /// @param axis The axis to rotate around (should be normalized).
     /// @return A new transformation matrix with the specified rotation applied to an identity matrix.
-    static inline Mat4 CreateRotation(const float rad, const Vec3& axis)
+    static inline Mat4 CreateRotation(const float angle, const Vec3& axis)
     {
-        return glm::rotate(glm::mat4(1.0f), rad, static_cast<glm::vec3>(axis));
+        return glm::rotate(glm::mat4(1.0f), angle, static_cast<glm::vec3>(axis));
+    }
+
+    /// @brief Creates a perspective projection matrix suitable for Vulkan rendering
+    /// @details This method builds a perspective projection matrix that accounts for Vulkan's coordinate
+    ///          system conventions, with Y pointing down and Z in [0,1] range. It applies the necessary
+    ///          coordinate system transformation to match Vulkan's expectations.
+    /// @param verticalFov The vertical field of view in degrees
+    /// @param aspectRatio The aspect ratio (width/height) of the viewport
+    /// @param nearPlane The distance to the near clipping plane (must be positive)
+    /// @param farPlane The distance to the far clipping plane (must be greater than near plane)
+    /// @return A perspective projection matrix compatible with Vulkan's coordinate system
+    static Mat4 CreatePerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane);
+
+    /// @brief Creates an orthographic projection matrix suitable for Vulkan rendering
+    /// @details This method builds an orthographic projection matrix that maps the specified view volume
+    ///          to Vulkan's normalized device coordinates, accounting for Vulkan's coordinate system
+    ///          with Y pointing down and Z in [0,1] range.
+    /// @param left The left coordinate of the view volume
+    /// @param right The right coordinate of the view volume
+    /// @param bottom The bottom coordinate of the view volume
+    /// @param top The top coordinate of the view volume
+    /// @param nearPlane The near clipping plane distance
+    /// @param farPlane The far clipping plane distance
+    /// @return An orthographic projection matrix compatible with Vulkan's coordinate system
+    static Mat4 CreateOrthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane);
+
+    /// @brief Creates a centered orthographic projection matrix suitable for Vulkan rendering
+    /// @details Convenience method that creates an orthographic projection with a symmetric view volume
+    ///          centered around the origin, specified by width and height.
+    /// @param width The total width of the view volume
+    /// @param height The total height of the view volume
+    /// @param nearPlane The near clipping plane distance
+    /// @param farPlane The far clipping plane distance
+    /// @return A centered orthographic projection matrix compatible with Vulkan's coordinate system
+    static inline Mat4 CreateOrthographic(float width, float height, float nearPlane, float farPlane)
+    {
+        return CreateOrthographic(-width/2, width/2, -height/2, height/2, nearPlane, farPlane);
     }
 
     /// @brief Outputs a Mat4 object to an output stream in a formatted manner.
