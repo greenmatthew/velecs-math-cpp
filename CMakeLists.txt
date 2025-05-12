@@ -17,6 +17,7 @@ set(LIB_SOURCES
     src/Vec3.cpp
     src/Vec4.cpp
     src/Mat4.cpp
+    src/Quat.cpp
 )
 
 # Always build the library
