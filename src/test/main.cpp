@@ -56,11 +56,19 @@ int main()
     Vec3 triPos = Vec3::FORWARD * 10;
     Vec3 triRot = 180.0f * Vec3::UP;
     Vec3 triScale = Vec3::ONE;
+    std::cout << "triangle pos:\n" << triPos << std::endl;
+    std::cout << "triangle pos:\n" << triRot << std::endl;
+    std::cout << "triangle pos:\n" << triScale << std::endl;
+
     Mat4 triPosMat = Mat4::FromPosition(triPos);
     Mat4 triRotMat = Mat4::FromRotationDeg(triRot);
     Mat4 triScaleMat = Mat4::FromScale(triScale);
-
-    Mat4 triModelMat = triScaleMat * triRotMat * triPosMat;
+    // SRT: Scale -> Rotate -> Translate
+    // Matrix multiplication is associative and done right to left...
+    // so while C++ doesn't do right to left (does left to right)
+    // bc its associative the result is the same:
+    // (P * R) * S == P * (R * S)
+    Mat4 triModelMat = triPosMat * triRotMat * triScaleMat;
     std::cout << "triangle Model Matrix:\n" << triModelMat << std::endl;
 
     std::cout << "triangle vertex 1:\n" << triV1.ToVec3() << " -> " << (triModelMat * triV1).ToVec3() << std::endl;
