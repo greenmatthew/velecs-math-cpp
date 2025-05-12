@@ -74,4 +74,4 @@ std::string Vec2::ToString() const
 
 // Private Methods
 
-} // namespace $defaultnamespace$::
+} // namespace velecs::math
