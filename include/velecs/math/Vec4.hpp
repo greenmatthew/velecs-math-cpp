@@ -262,7 +262,28 @@ public:
         return *this; // Return ref to allow chaining assignment operations
     }
 
-    inline float& operator[](int index) {
+    /// @brief Provides array-like access to vector components.
+    /// @details Allows accessing vector components by index, where [0]=x, [1]=y, [2]=z, [3]=w.
+    ///          Includes bounds checking to prevent invalid memory access.
+    /// @param index The index of the component to access (0-3).
+    /// @returns A reference to the component at the specified index.
+    /// @throws std::out_of_range if the index is out of bounds (not 0-3).
+    inline float& operator[](int index)
+    {
+        if (index >= 0 && index < 4) {
+            return (&x)[index]; // Access array of 4 floats starting at address of x
+        }
+        throw std::out_of_range("Vec4 index out of range");
+    }
+
+    /// @brief Provides const array-like access to vector components.
+    /// @details Allows read-only access to vector components by index, where [0]=x, [1]=y, [2]=z, [3]=w.
+    ///          Includes bounds checking to prevent invalid memory access.
+    /// @param index The index of the component to access (0-3).
+    /// @returns A const reference to the component at the specified index.
+    /// @throws std::out_of_range if the index is out of bounds (not 0-3).
+    inline const float& operator[](int index) const
+    {
         if (index >= 0 && index < 4) {
             return (&x)[index]; // Access array of 4 floats starting at address of x
         }
