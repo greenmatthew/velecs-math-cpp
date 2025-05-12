@@ -38,7 +38,7 @@ public:
 
     /// @brief Construct from glm::quat
     /// @param quat The GLM quaternion to copy
-    Quat(const glm::quat& quat)
+    inline Quat(const glm::quat& quat)
         : internal_quat(quat) {}
 
     /// @brief Construct a quaternion from components
