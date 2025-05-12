@@ -74,6 +74,16 @@ Vec4::operator glm::vec4() const
     return glm::vec4(x, y, z, w);
 }
 
+Vec4 Vec4::CreatePoint(const Vec3 vec)
+{
+    return Vec4(vec, 1.0f);
+}
+
+Vec4 Vec4::CreateVector(const Vec3 vec)
+{
+    return Vec4(vec, 0.0f);
+}
+
 Vec4& Vec4::operator=(const Vec4 other)
 {
     x = other.x;

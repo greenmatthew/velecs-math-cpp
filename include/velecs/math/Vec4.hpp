@@ -125,6 +125,44 @@ public:
     /// @returns A glm::vec4 with the same components as this Vec4.
     operator glm::vec4() const;
 
+    /// @brief Creates a point in homogeneous coordinates (w=1).
+    /// @details This static factory method creates a Vec4 representing a point in 3D space
+    ///          by setting the w-component to 1.0f.
+    /// @param x The x-coordinate of the point.
+    /// @param y The y-coordinate of the point.
+    /// @param z The z-coordinate of the point.
+    /// @returns A Vec4 representing a point with the given coordinates and w=1.0f.
+    static inline Vec4 CreatePoint(const float x, const float y, const float z)
+    {
+        return Vec4(x, y, z, 1.0f);
+    }
+
+    /// @brief Creates a point in homogeneous coordinates (w=1) from a Vec3.
+    /// @details This static factory method creates a Vec4 representing a point in 3D space
+    ///          using the components from a Vec3 and setting the w-component to 1.0f.
+    /// @param vec The Vec3 containing the x, y, and z coordinates of the point.
+    /// @returns A Vec4 representing a point with the given coordinates and w=1.0f.
+    static Vec4 CreatePoint(const Vec3 vec);
+
+    /// @brief Creates a direction vector in homogeneous coordinates (w=0).
+    /// @details This static factory method creates a Vec4 representing a direction vector
+    ///          in 3D space by setting the w-component to 0.0f.
+    /// @param x The x-component of the vector.
+    /// @param y The y-component of the vector.
+    /// @param z The z-component of the vector.
+    /// @returns A Vec4 representing a direction vector with the given components and w=0.0f.
+    static inline Vec4 CreateVector(const float x, const float y, const float z)
+    {
+        return Vec4(x, y, z, 0.0f);
+    }
+
+    /// @brief Creates a direction vector in homogeneous coordinates (w=0) from a Vec3.
+    /// @details This static factory method creates a Vec4 representing a direction vector
+    ///          in 3D space using the components from a Vec3 and setting the w-component to 0.0f.
+    /// @param vec The Vec3 containing the x, y, and z components of the vector.
+    /// @returns A Vec4 representing a direction vector with the given components and w=0.0f.
+    static Vec4 CreateVector(const Vec3 vec);
+
     /// @brief Assigns the values of another Vec4 object to this Vec4 object.
     /// @param[in] other The other Vec4 object whose values will be assigned to this Vec4 object.
     /// @return A reference to this Vec4 object, after the assignment.
