@@ -13,6 +13,9 @@
 #include "velecs/math/Vec4.hpp"
 #include "velecs/math/Quat.hpp"
 
+#include <glm/gtc/epsilon.hpp>
+#include <glm/vector_relational.hpp>
+
 namespace velecs::math {
 
 // Public Fields
@@ -27,6 +30,46 @@ Mat4::Mat4(float diagonal)
     : internal_mat(glm::mat4(diagonal)) {}
 
 // Public Methods
+
+bool Mat4::operator==(const Mat4& other) const
+{
+    return internal_mat == other.internal_mat;
+}
+
+bool Mat4::operator!=(const Mat4& other) const
+{
+    return internal_mat != other.internal_mat;
+}
+
+bool Mat4::FastEqual(const Mat4& other) const
+{
+    return std::memcmp(&internal_mat, &other.internal_mat, sizeof(glm::mat4)) == 0;
+}
+
+bool Mat4::FastNotEqual(const Mat4& other) const
+{
+    return std::memcmp(&internal_mat, &other.internal_mat, sizeof(glm::mat4)) != 0;
+}
+
+bool Mat4::ApproxEqual(const Mat4& other, float epsilon/* = 1e-6f*/) const
+{
+    return glm::all(
+        glm::epsilonEqual(internal_mat[0], other.internal_mat[0], epsilon) &&
+        glm::epsilonEqual(internal_mat[1], other.internal_mat[1], epsilon) &&
+        glm::epsilonEqual(internal_mat[2], other.internal_mat[2], epsilon) &&
+        glm::epsilonEqual(internal_mat[3], other.internal_mat[3], epsilon)
+    );
+}
+
+bool Mat4::ApproxNotEqual(const Mat4& other, float epsilon/* = 1e-6f*/) const
+{
+    return glm::any(
+        glm::epsilonNotEqual(internal_mat[0], other.internal_mat[0], epsilon) ||
+        glm::epsilonNotEqual(internal_mat[1], other.internal_mat[1], epsilon) ||
+        glm::epsilonNotEqual(internal_mat[2], other.internal_mat[2], epsilon) ||
+        glm::epsilonNotEqual(internal_mat[3], other.internal_mat[3], epsilon)
+    );
+}
 
 Mat4 Mat4::FromPosition(const Vec3& position)
 {

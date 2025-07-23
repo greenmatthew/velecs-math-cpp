@@ -58,6 +58,13 @@ public:
 
     // Public Methods
 
+    bool operator==(const Mat4& other) const;
+    bool operator!=(const Mat4& other) const;
+    bool FastEqual(const Mat4& other) const;
+    bool FastNotEqual(const Mat4& other) const;
+    bool ApproxEqual(const Mat4& other, float epsilon = 1e-6f) const;
+    bool ApproxNotEqual(const Mat4& other, float epsilon = 1e-6f) const;
+
     /// @brief Creates a transformation matrix from a position vector.
     /// @details Efficiently constructs a translation matrix by directly setting the
     ///          position components in the last column of the identity matrix.
