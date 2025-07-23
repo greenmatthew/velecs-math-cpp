@@ -31,7 +31,7 @@ int main()
 
     Mat4 compTransforms = Mat4::IDENTITY
         .WithScale(Vec3(1, 2, 3))
-        .WithRotation(45.0f * DEG_TO_RAD, Vec3::DOWN)
+        .WithRotationRad(45.0f * DEG_TO_RAD, Vec3::DOWN)
         .WithTranslation((Vec3::FORWARD * 25) + (Vec3::RIGHT * 5))
         ;
     std::cout << compTransforms << std::endl;

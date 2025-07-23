@@ -82,9 +82,9 @@ public:
     /// @brief Creates a rotation matrix from Euler angles in radians.
     /// @details Converts the Euler angles to a quaternion and then to a rotation matrix.
     ///          Uses the order X-Y-Z for applying rotations (pitch, yaw, roll).
-    /// @param rotation The rotation vector in radians (x=pitch, y=yaw, z=roll).
+    /// @param rotationRad The rotation vector in radians (x=pitch, y=yaw, z=roll).
     /// @return A transformation matrix representing the specified rotation.
-    static Mat4 FromRotation(const Vec3& rotation);
+    static Mat4 FromRotationRad(const Vec3& rotationRad);
 
     /// @brief Creates a rotation matrix from Euler angles in degrees.
     /// @details Converts the Euler angles to a quaternion and then to a rotation matrix.
@@ -98,12 +98,12 @@ public:
     /// @details This method builds a perspective projection matrix that accounts for Vulkan's coordinate
     ///          system conventions, with Y pointing down and Z in [0,1] range. It applies the necessary
     ///          coordinate system transformation to match Vulkan's expectations.
-    /// @param verticalFov The vertical field of view in degrees
+    /// @param verticalFovRad The vertical field of view in radians
     /// @param aspectRatio The aspect ratio (width/height) of the viewport
     /// @param nearPlane The distance to the near clipping plane (must be positive)
     /// @param farPlane The distance to the far clipping plane (must be greater than near plane)
     /// @return A perspective projection matrix compatible with Vulkan's coordinate system
-    static Mat4 FromPerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane);
+    static Mat4 FromPerspectiveRad(float verticalFovRad, float aspectRatio, float nearPlane, float farPlane);
 
     /// @brief Creates an orthographic projection matrix suitable for Vulkan rendering
     /// @details This method builds an orthographic projection matrix that maps the specified view volume
@@ -128,7 +128,14 @@ public:
     /// @return A centered orthographic projection matrix compatible with Vulkan's coordinate system
     inline static Mat4 FromOrthographic(float width, float height, float nearPlane, float farPlane)
     {
-        return FromOrthographic(-width/2, width/2, -height/2, height/2, nearPlane, farPlane);
+        return FromOrthographic(
+            -width * 0.5f,
+            width * 0.5f,
+            -height * 0.5f,
+            height * 0.5f,
+            nearPlane,
+            farPlane
+        );
     }
 
     /// @brief Overloads the multiplication assignment operator to multiply this matrix by another matrix.
@@ -152,10 +159,10 @@ public:
     /// @brief Modifies this matrix by applying rotation around an axis and returns a reference to this matrix.
     /// @details Rotates this matrix around the specified axis by the given angle in radians, 
     ///          allowing for method chaining.
-    /// @param angle The rotation angle in radians.
+    /// @param angleRad The rotation angle in radians.
     /// @param axis The axis to rotate around (should be normalized).
     /// @return A reference to this matrix after applying the rotation.
-    Mat4& Rotate(const float angle, const Vec3& axis);
+    Mat4& RotateRad(const float angleRad, const Vec3& axis);
 
     /// @brief Modifies this matrix by applying rotation around an axis and returns a reference to this matrix.
     /// @details Rotates this matrix around the specified axis by the given angle in degrees, 
@@ -168,9 +175,9 @@ public:
     /// @brief Modifies this matrix by applying Euler angle rotation and returns a reference to this matrix.
     /// @details Applies rotation based on Euler angles in radians (pitch, yaw, roll),
     ///          allowing for method chaining. Uses quaternion conversion internally for better accuracy.
-    /// @param eulerAngles The Euler angles in radians (x=pitch, y=yaw, z=roll).
+    /// @param eulerAnglesRad The Euler angles in radians (x=pitch, y=yaw, z=roll).
     /// @return A reference to this matrix after applying the rotation.
-    Mat4& Rotate(const Vec3& eulerAngles);
+    Mat4& RotateRad(const Vec3& eulerAnglesRad);
 
     /// @brief Modifies this matrix by applying Euler angle rotation and returns a reference to this matrix.
     /// @details Applies rotation based on Euler angles in degrees (pitch, yaw, roll),
@@ -223,10 +230,10 @@ public:
     /// @details Creates a new matrix that represents the result of rotating this matrix
     ///          around the specified axis by the given angle. This operation does not
     ///          modify the original matrix.
-    /// @param angle The rotation angle in radians.
+    /// @param angleRad The rotation angle in radians.
     /// @param axis The axis to rotate around (should be normalized).
     /// @return A new matrix representing this matrix with the rotation applied.
-    Mat4 WithRotation(const float angle, const Vec3& axis) const;
+    Mat4 WithRotationRad(const float angleRad, const Vec3& axis) const;
 
     /// @brief Applies rotation in degrees to this matrix and returns a new matrix.
     /// @details Convenience method that converts degrees to radians and applies rotation.
@@ -236,14 +243,14 @@ public:
     /// @return A new matrix representing this matrix with the rotation applied.
     inline Mat4 WithRotationDeg(const float angleDeg, const Vec3& axis) const
     {
-        return WithRotation(angleDeg * DEG_TO_RAD, axis);
+        return WithRotationRad(angleDeg * DEG_TO_RAD, axis);
     }
 
     /// @brief Creates a new matrix by applying Euler angle rotation to this matrix.
     /// @details Returns a new matrix without modifying the original.
-    /// @param eulerAngles The Euler angles in radians (pitch, yaw, roll).
+    /// @param eulerAnglesRad The Euler angles in radians (pitch, yaw, roll).
     /// @return A new matrix representing this matrix with the rotation applied.
-    Mat4 WithRotation(const Vec3& eulerAngles) const;
+    Mat4 WithRotationRad(const Vec3& eulerAnglesRad) const;
 
     /// @brief Creates a new matrix by applying Euler angle rotation in degrees to this matrix.
     /// @details Returns a new matrix without modifying the original.

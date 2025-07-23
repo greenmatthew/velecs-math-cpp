@@ -62,12 +62,12 @@ public:
     /// @param y Rotation around Y-axis in radians
     /// @param z Rotation around Z-axis in radians
     /// @return A quaternion representing the specified rotation
-    static Quat FromEulerAngles(const float x, const float y, const float z);
+    static Quat FromEulerAnglesRad(const float x, const float y, const float z);
     
     /// @brief Create a quaternion from Euler angles
     /// @param angles Vector of rotation angles in radians (x, y, z)
     /// @return A quaternion representing the specified rotation
-    static Quat FromEulerAngles(const Vec3& angles);
+    static Quat FromEulerAnglesRad(const Vec3& angles);
     
     /// @brief Create a quaternion from Euler angles in degrees
     /// @param x Rotation around X-axis in degrees
@@ -83,7 +83,7 @@ public:
 
     /// @brief Convert this quaternion to Euler angles
     /// @return A Vec3 containing the Euler angles in radians (x, y, z)
-    Vec3 ToEulerAngles() const;
+    Vec3 ToEulerAnglesRad() const;
     
     /// @brief Convert this quaternion to Euler angles in degrees
     /// @return A Vec3 containing the Euler angles in degrees (x, y, z)

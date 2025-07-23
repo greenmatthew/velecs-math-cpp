@@ -89,9 +89,9 @@ Mat4 Mat4::FromScale(const Vec3& scale)
     return Mat4(internal);
 }
 
-Mat4 Mat4::FromRotation(const Vec3& rotation)
+Mat4 Mat4::FromRotationRad(const Vec3& rotation)
 {
-    return Quat::FromEulerAngles(rotation).ToMatrix();
+    return Quat::FromEulerAnglesRad(rotation).ToMatrix();
 }
 
 Mat4 Mat4::FromRotationDeg(const Vec3& rotationDeg)
@@ -99,15 +99,14 @@ Mat4 Mat4::FromRotationDeg(const Vec3& rotationDeg)
     return Quat::FromEulerAnglesDeg(rotationDeg).ToMatrix();
 }
 
-Mat4 Mat4::FromPerspective(float verticalFov, float aspectRatio, float nearPlane, float farPlane)
+Mat4 Mat4::FromPerspectiveRad(float verticalFovRad, float aspectRatio, float nearPlane, float farPlane)
 {
     // Define the coordinate system change matrix (X)
     glm::mat4 X = glm::mat4(1.0f); // Start with an identity matrix
     X[1][1] = -1.0f; // Flip Y axis
     X[2][2] = -1.0f; // Flip Z axis
 
-    const float vFovRads = DEG_TO_RAD * verticalFov;
-    const float focalLength = 1.0f / (std::tanf(vFovRads * 0.5f));
+    const float focalLength = 1.0f / (std::tanf(verticalFovRad * 0.5f));
     const float x = focalLength / aspectRatio;
     const float y = focalLength;
     const float A = farPlane / (farPlane - nearPlane);
@@ -176,9 +175,9 @@ Mat4& Mat4::Scale(const Vec3& scale)
     return *this;
 }
 
-Mat4& Mat4::Rotate(const float angle, const Vec3& axis)
+Mat4& Mat4::RotateRad(const float angleRad, const Vec3& axis)
 {
-    *this = WithRotation(angle, axis);
+    *this = WithRotationRad(angleRad, axis);
     return *this;
 }
 
@@ -188,9 +187,9 @@ Mat4& Mat4::RotateDeg(const float angleDeg, const Vec3& axis)
     return *this;
 }
 
-Mat4& Mat4::Rotate(const Vec3& eulerAngles)
+Mat4& Mat4::RotateRad(const Vec3& eulerAnglesRad)
 {
-    *this = WithRotation(eulerAngles);
+    *this = WithRotationRad(eulerAnglesRad);
     return *this;
 }
 
@@ -216,14 +215,14 @@ Mat4 Mat4::WithScale(const Vec3& scale) const
     return glm::scale(internal_mat, static_cast<glm::vec3>(scale));
 }
 
-Mat4 Mat4::WithRotation(const float angle, const Vec3& axis) const
+Mat4 Mat4::WithRotationRad(const float angleRad, const Vec3& axis) const
 {
-    return glm::rotate(internal_mat, angle, static_cast<glm::vec3>(axis));
+    return glm::rotate(internal_mat, angleRad, static_cast<glm::vec3>(axis));
 }
 
-Mat4 Mat4::WithRotation(const Vec3& eulerAngles) const
+Mat4 Mat4::WithRotationRad(const Vec3& eulerAnglesRad) const
 {
-    return *this * Quat::FromEulerAngles(eulerAngles).ToMatrix();
+    return *this * Quat::FromEulerAnglesRad(eulerAnglesRad).ToMatrix();
 }
 
 Mat4 Mat4::WithRotationDeg(const Vec3& eulerAnglesDeg) const
