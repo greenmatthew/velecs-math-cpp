@@ -39,10 +39,10 @@ const Vec4 Vec4::W            {  0.0f,  0.0f,  0.0f,  1.0f };
 
 // Constructors and Destructors
 
-Vec4::Vec4(const Vec2 vec2, const float z, const float w)
+Vec4::Vec4(const Vec2 vec2, const float z/* = 0.0f*/, const float w/* = 0.0f*/)
     : x(vec2.x), y(vec2.y), z(z), w(w) {}
 
-Vec4::Vec4(const float x, const Vec2 vec2, const float w)
+Vec4::Vec4(const float x, const Vec2 vec2, const float w/* = 0.0f*/)
     : x(x), y(vec2.x), z(vec2.y), w(w) {}
 
 Vec4::Vec4(const float x, const float y, const Vec2 vec2)
@@ -50,7 +50,7 @@ Vec4::Vec4(const float x, const float y, const Vec2 vec2)
 
 
 
-Vec4::Vec4(const Vec3 vec3, const float w)
+Vec4::Vec4(const Vec3 vec3, const float w/* = 0.0f*/)
     : x(vec3.x), y(vec3.y), z(vec3.z), w(w) {}
 
 Vec4::Vec4(const float x, const Vec3 vec3)

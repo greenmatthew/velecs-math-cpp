@@ -44,27 +44,29 @@ public:
     static const Vec2 J;            /// @brief A unit vector along the y-axis (0, 1).
 
 
-    float x;  /// @brief The x-component of the vector.
-    float y;  /// @brief The y-component of the vector.
+    float x{0.0f};  /// @brief The x-component of the vector.
+    float y{0.0f};  /// @brief The y-component of the vector.
 
     // Constructors and Destructors
+
+    constexpr Vec2() = default;
 
     /// @brief Constructs a Vec2 with the specified coordinates.
     /// @param[in] x The x-coordinate.
     /// @param[in] y The y-coordinate.
-    inline Vec2(const float x, const float y)
+    constexpr Vec2(const float x, const float y)
         : x(x), y(y) {}
 
     /// @brief Copy constructor. Constructs a new Vec2 with the same values as the specified Vec2.
     /// @param[in] other The Vec2 to copy.
-    inline Vec2(const Vec2 &other)
+    constexpr Vec2(const Vec2 &other)
         : x(other.x), y(other.y) {}
     
     /// @brief Constructs a Vec2 from a glm::vec2.
     /// @details Creates a new Vec2 object with components initialized from the given glm::vec2.
     ///          This allows for easy conversion from GLM's vector type to the velecs math library.
     /// @param[in] other The glm::vec2 to copy components from.
-    inline Vec2(const glm::vec2 &other)
+    constexpr Vec2(const glm::vec2 &other)
         : x(other.x), y(other.y) {}
 
     /// @brief Default deconstructor.

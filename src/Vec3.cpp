@@ -36,7 +36,7 @@ const Vec3 Vec3::K            {  0.0f,  0.0f,  1.0f };
 
 // Constructors and Destructors
 
-Vec3::Vec3(const Vec2 vec2, const float z)
+Vec3::Vec3(const Vec2 vec2, const float z/* = 0.0f*/)
     : x(vec2.x), y(vec2.y), z(z) {}
 
 Vec3::Vec3(const float x, const struct Vec2 vec2)

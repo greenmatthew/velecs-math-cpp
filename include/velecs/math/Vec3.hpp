@@ -49,32 +49,32 @@ public:
     static const Vec3 K;            /// @brief A unit vector along the z-axis (0, 0, 1).
     
 
-    float x; /// @brief The x-component of the vector.
-    float y; /// @brief The y-component of the vector.
-    float z; /// @brief The z-component of the vector.
+    float x{0.0f}; /// @brief The x-component of the vector.
+    float y{0.0f}; /// @brief The y-component of the vector.
+    float z{0.0f}; /// @brief The z-component of the vector.
 
     // Constructors and Destructors
+
+    constexpr Vec3() = default;
     
     /// @brief Constructs a Vec3 with specified x, y, and z components.
     /// @param[in] x The x-component.
     /// @param[in] y The y-component.
     /// @param[in] z The z-component.
-    inline Vec3(const float x, const float y, const float z)
+    constexpr Vec3(const float x, const float y, const float z)
         : x(x), y(y), z(z) {}
 
     /// @brief Copy constructor. Constructs a new Vec3 with the same values as the specified Vec3.
     /// @param[in] other The Vec3 to copy.
-    inline Vec3(const Vec3 &other)
+    constexpr Vec3(const Vec3 &other)
         : x(other.x), y(other.y), z(other.z) {}
 
     /// @brief Constructs a Vec3 from a glm::vec3.
     /// @details Creates a new Vec3 object with components initialized from the given glm::vec3.
     ///          This allows for easy conversion from GLM's vector type to the velecs math library.
     /// @param[in] other The glm::vec3 to copy components from.
-    inline Vec3(const glm::vec3 &other)
+    constexpr Vec3(const glm::vec3 &other)
         : x(other.x), y(other.y), z(other.z) {}
-
-
 
     /// @brief Constructs a Vec3 from a Vec2 and an optional z-component.
     /// @details The x and y components are initialized from the Vec2, while the z-component 

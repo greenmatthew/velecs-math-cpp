@@ -48,12 +48,12 @@ build-exec-release:
 # Run the test executable (debug)
 run: build-exec
     @echo "Running velecs-math test executable (debug)..."
-    & "{{build}}/Debug/velecs-math-test.exe"
+    & "{{bin}}/Debug/velecs-math-test.exe"
 
 # Run the test executable (release)
 run-release: build-exec-release
     @echo "Running velecs-math test executable (release)..."
-    & "{{build}}/Release/velecs-math-test.exe"
+    & "{{bin}}/Release/velecs-math-test.exe"
 
 # Create just the VS solution without building
 solution:

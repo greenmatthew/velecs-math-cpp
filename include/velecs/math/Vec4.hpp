@@ -50,30 +50,33 @@ public:
     static const Vec4 W;            /// @brief A unit vector along the w-axis (0, 0, 0, 1).
     
 
-    float x; /// @brief The x-component of the vector.
-    float y; /// @brief The y-component of the vector.
-    float z; /// @brief The z-component of the vector.
-    float w; /// @brief The w-component of the vector.
+    float x{0.0f}; /// @brief The x-component of the vector.
+    float y{0.0f}; /// @brief The y-component of the vector.
+    float z{0.0f}; /// @brief The z-component of the vector.
+    float w{0.0f}; /// @brief The w-component of the vector.
 
     // Constructors and Destructors
+
+    /// @brief Default constructor
+    constexpr Vec4() = default;
     
     /// @brief Constructs a Vec4 with specified x, y, and z components.
     /// @param[in] x The x-component.
     /// @param[in] y The y-component.
     /// @param[in] z The z-component.
     /// @param[in] w The w-component.
-    inline Vec4(const float x, const float y, const float z, const float w)
+    constexpr Vec4(const float x, const float y, const float z, const float w)
         : x(x), y(y), z(z), w(w) {}
 
     /// @brief Copy constructor. Constructs a new Vec4 with the same values as the specified Vec4.
     /// @param[in] other The Vec4 to copy.
-    inline Vec4(const Vec4& other)
+    constexpr Vec4(const Vec4& other)
         : x(other.x), y(other.y), z(other.z), w(other.w) {}
 
     /// @brief Constructs a Vec4 from a glm::vec4.
     /// @details Creates a Vec4 with components initialized from the given glm::vec4.
     /// @param[in] vec The glm::vec4 to convert from.
-    inline Vec4(const glm::vec4& other)
+    constexpr Vec4(const glm::vec4& other)
         : x(other.x), y(other.y), z(other.z), w(other.w) {}
 
 
