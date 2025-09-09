@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
+
+# Check if VCPKG_ROOT is set
+if(NOT DEFINED ENV{VCPKG_ROOT})
+    message(FATAL_ERROR "VCPKG_ROOT environment variable not set. Please install vcpkg and set VCPKG_ROOT.")
+endif()
+
 project(velecs-math VERSION 0.1.0)
 
 # Set C++ standard to C++17
@@ -36,29 +42,12 @@ target_include_directories(velecs-math
         $<INSTALL_INTERFACE:include>
 )
 
-# Link dependencies
-# Find GLM or create an interface target for it
-if(NOT TARGET glm::glm)
-    find_package(glm QUIET)
-    
-    if(NOT glm_FOUND)
-        # Create interface library if find_package fails
-        add_library(glm INTERFACE)
-        
-        # Check if VULKAN_SDK environment variable is set
-        if(DEFINED ENV{VULKAN_SDK})
-            # Specify the include directory for GLM using Vulkan SDK path
-            target_include_directories(glm INTERFACE "$ENV{VULKAN_SDK}/Include")
-            target_compile_definitions(glm INTERFACE GLM_FORCE_DEPTH_ZERO_TO_ONE)
-            add_library(glm::glm ALIAS glm)
-        else()
-            message(WARNING "VULKAN_SDK environment variable not set. GLM might not be found.")
-        endif()
-    endif()
-endif()
-
-# Link against GLM
+# Find and link GLM using vcpkg
+find_package(glm CONFIG REQUIRED)
 target_link_libraries(velecs-math PUBLIC glm::glm)
+
+# Set GLM compile definitions for Vulkan compatibility
+target_compile_definitions(velecs-math PUBLIC GLM_FORCE_DEPTH_ZERO_TO_ONE)
 
 # Installation rules for the library
 install(TARGETS velecs-math

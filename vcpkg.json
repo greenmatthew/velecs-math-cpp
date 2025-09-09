@@ -1,0 +1,9 @@
+{
+  "name": "velecs-math",
+  "version": "0.1.0-dev",
+  "description": "A C++ mathematics library for 3D graphics and game development",
+  "homepage": "https://github.com/greenmatthew/velecs-math-cpp",
+  "dependencies": [
+    "glm"
+  ]
+}

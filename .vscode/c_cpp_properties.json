@@ -4,12 +4,13 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${env:VULKAN_SDK}/Include"
+                "${workspaceFolder}/build/vcpkg_installed/x64-windows/include"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "GLM_FORCE_DEPTH_ZERO_TO_ONE"
             ],
             "compilerPath": "${env:MSVC}",
             "cStandard": "c11",

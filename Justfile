@@ -1,78 +1,49 @@
 # Set shell for Windows
 set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 
-# Generator used for project
-generator := "Visual Studio 17 2022"
-# Where the project gets generated at
-build := "build"
-# Where the executable gets compiled to
-bin := "bin"
-# Where the library gets compiled to
-libs := "libs"
+# Configuration
+generator := "Visual Studio 17 2022"  # Visual Studio generator
+build := "build"                      # CMake build directory
+bin := "bin"                          # Binary output directory
+exe := "velecs-math-test.exe"         # Test executable name
 
-# Default target to show available commands
+# Default target - show available commands
 default: help
 
-# Show available commands
-help:
+# Show all available commands
+@help:
     just --list
 
-# Build the library in debug mode
-build:
-    @echo "Building velecs-math library (debug)..."
-    if (!(Test-Path {{build}})) { New-Item -ItemType Directory -Path {{build}} -Force }
-    cmake -S . -B {{build}} -DVELECS_MATH_BUILD_TESTS=OFF -G "{{generator}}"
+# Generate Visual Studio solution and install dependencies
+@build-solution:
+    echo "Generating Visual Studio solution..."
+    if (!(Test-Path {{build}})) { New-Item -ItemType Directory -Path {{build}} -Force > $null }
+    cmake -S . -B {{build}} -DVELECS_MATH_BUILD_TESTS=ON -G "{{generator}}" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+
+# Build the project in debug mode
+@build: build-solution
+    echo "Building project (Debug)..."
     cmake --build {{build}} --config Debug
 
-# Build the library in release mode
-build-release:
-    @echo "Building velecs-math library (release)..."
-    if (!(Test-Path {{build}})) { New-Item -ItemType Directory -Path {{build}} -Force }
-    cmake -S . -B {{build}} -DVELECS_MATH_BUILD_TESTS=OFF -G "{{generator}}"
+# Build the project in release mode  
+@build-release: build-solution
+    echo "Building project (Release)..."
     cmake --build {{build}} --config Release
 
-# Build the library and test executable in debug mode
-build-exec:
-    @echo "Building velecs-math library and test executable (debug)..."
-    if (!(Test-Path {{build}})) { New-Item -ItemType Directory -Path {{build}} -Force }
-    cmake -S . -B {{build}} -DVELECS_MATH_BUILD_TESTS=ON -G "{{generator}}"
-    cmake --build {{build}} --config Debug
+# Build and run the test executable (debug)
+@run: build
+    echo "Running test executable (Debug)..."
+    {{bin}}/Debug/{{exe}}
 
-# Build the library and test executable in release mode
-build-exec-release:
-    @echo "Building velecs-math library and test executable (release)..."
-    if (!(Test-Path {{build}})) { New-Item -ItemType Directory -Path {{build}} -Force }
-    cmake -S . -B {{build}} -DVELECS_MATH_BUILD_TESTS=ON -G "{{generator}}"
-    cmake --build {{build}} --config Release
+# Build and run the test executable (release)
+@run-release: build-release
+    echo "Running test executable (Release)..."
+    {{bin}}/Release/{{exe}}
 
-# Run the test executable (debug)
-run: build-exec
-    @echo "Running velecs-math test executable (debug)..."
-    & "{{bin}}/Debug/velecs-math-test.exe"
+# Clean build directory
+@clean:
+    if (Test-Path {{build}}) { Remove-Item -Recurse -Force {{build}}; echo "Cleaned build directory..." }
 
-# Run the test executable (release)
-run-release: build-exec-release
-    @echo "Running velecs-math test executable (release)..."
-    & "{{bin}}/Release/velecs-math-test.exe"
-
-# Create just the VS solution without building
-solution:
-    @echo "Creating Visual Studio solution..."
-    if (!(Test-Path {{build}})) { New-Item -ItemType Directory -Path {{build}} -Force }
-    cmake -S . -B {{build}} -G "{{generator}}"
-
-# Open the solution in Visual Studio
-open-solution: solution
-    @echo "Opening solution in Visual Studio..."
-    Start-Process "{{build}}/velecs-math.sln"
-
-# Clean build directories
-clean:
-    @echo "Cleaning build directories..."
-    if (Test-Path {{build}}) { Remove-Item -Recurse -Force {{build}} }
-
-# Clean everything
-clean-all: clean
-    @echo "Cleaning everything..."
-    if (Test-Path {{bin}}) { Remove-Item -Recurse -Force {{bin}} }
-    if (Test-Path {{libs}}) { Remove-Item -Recurse -Force {{libs}} }
+# Clean everything including vcpkg dependencies
+@clean-all: clean
+    if (Test-Path vcpkg_installed) { Remove-Item -Recurse -Force vcpkg_installed; echo "Cleaned vcpkg directory..." }
