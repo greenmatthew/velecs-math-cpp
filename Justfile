@@ -43,7 +43,3 @@ default: help
 # Clean build directory
 @clean:
     if (Test-Path {{build}}) { Remove-Item -Recurse -Force {{build}}; echo "Cleaned build directory..." }
-
-# Clean everything including vcpkg dependencies
-@clean-all: clean
-    if (Test-Path vcpkg_installed) { Remove-Item -Recurse -Force vcpkg_installed; echo "Cleaned vcpkg directory..." }
