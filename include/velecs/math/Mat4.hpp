@@ -199,7 +199,7 @@ public:
     ///          Useful for converting between coordinate spaces or creating view matrices.
     /// @returns A reference to this matrix after computing its inverse.
     /// @note This operation may fail if the matrix is singular (determinant is zero).
-    inline Mat4& Mat4::Inverse()
+    inline Mat4& Inverse()
     {
         return *this = WithInverse();
     }
@@ -208,7 +208,7 @@ public:
     /// @details Swaps rows and columns of this matrix in-place, allowing for method chaining.
     ///          Used in certain graphics operations such as normal transformation.
     /// @returns A reference to this matrix after computing its transpose.
-    inline Mat4& Mat4::Transpose()
+    inline Mat4& Transpose()
     {
         return *this = WithTranspose();
     }
