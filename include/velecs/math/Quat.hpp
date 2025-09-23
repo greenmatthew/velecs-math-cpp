@@ -1,13 +1,3 @@
-/// @file    Quat.hpp
-/// @author  Matthew Green
-/// @date    2025-05-10 18:13:28
-/// 
-/// @section LICENSE
-/// 
-/// Copyright (c) 2025 Matthew Green - All rights reserved
-/// Unauthorized copying of this file, via any medium is strictly prohibited
-/// Proprietary and confidential
-
 #pragma once
 
 #include "velecs/math/Mat4.hpp"
@@ -26,8 +16,6 @@ struct Vec3;
 /// game engine convention of (x,y,z,w) component ordering.
 struct Quat {
 public:
-    // Enums
-
     // Public Fields
 
     static const Quat IDENTITY; /// @brief Identity quaternion that represents no rotation (0, 0, 0, 1).

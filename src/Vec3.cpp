@@ -1,13 +1,3 @@
-/// @file    Vec3.cpp
-/// @author  Matthew Green
-/// @date    10/27/2023 17:23:08
-/// 
-/// @section LICENSE
-/// 
-/// Copyright (c) 2025 Matthew Green - All rights reserved
-/// Unauthorized copying of this file, via any medium is strictly prohibited
-/// Proprietary and confidential
-
 #include "velecs/math/Vec3.hpp"
 #include "velecs/math/Vec2.hpp"
 

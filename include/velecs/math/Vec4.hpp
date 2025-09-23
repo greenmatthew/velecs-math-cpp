@@ -1,13 +1,3 @@
-/// @file    Vec4.hpp
-/// @author  Matthew Green
-/// @date    2025-05-10 12:05:17
-/// 
-/// @section LICENSE
-/// 
-/// Copyright (c) 2025 Matthew Green - All rights reserved
-/// Unauthorized copying of this file, via any medium is strictly prohibited
-/// Proprietary and confidential
-
 #pragma once
 
 #include "velecs/math/Consts.hpp"
@@ -27,8 +17,6 @@ struct Vec3;
 /// Rest of description.
 struct Vec4 {
 public:
-    // Enums
-
     // Public Fields
 
     static const Vec4 ZERO;         /// @brief A vector with all components set to zero (0, 0, 0, 0).

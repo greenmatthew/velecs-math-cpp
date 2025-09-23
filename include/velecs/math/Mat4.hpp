@@ -1,13 +1,3 @@
-/// @file    Mat4.hpp
-/// @author  Matthew Green
-/// @date    2025-05-09 17:32:52
-/// 
-/// @section LICENSE
-/// 
-/// Copyright (c) 2025 Matthew Green - All rights reserved
-/// Unauthorized copying of this file, via any medium is strictly prohibited
-/// Proprietary and confidential
-
 #pragma once
 
 #include "velecs/math/Consts.hpp"
@@ -32,8 +22,6 @@ struct Quat;
 /// underlying glm functionality.
 struct Mat4 {
 public:
-    // Enums
-
     // Public Fields
 
     static const Mat4 IDENTITY;     /// @brief A 4x4 identity matrix with ones on the main diagonal and zeros elsewhere.

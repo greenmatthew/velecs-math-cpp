@@ -1,13 +1,3 @@
-/// @file    Mat4.cpp
-/// @author  Matthew Green
-/// @date    2025-05-09 17:33:54
-/// 
-/// @section LICENSE
-/// 
-/// Copyright (c) 2025 Matthew Green - All rights reserved
-/// Unauthorized copying of this file, via any medium is strictly prohibited
-/// Proprietary and confidential
-
 #include "velecs/math/Mat4.hpp"
 #include "velecs/math/Vec3.hpp"
 #include "velecs/math/Vec4.hpp"
